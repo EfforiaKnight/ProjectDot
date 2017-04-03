@@ -17,6 +17,14 @@ set fileencodings=utf-8
 let mapleader=','
 " }
 
+" ================ Folds ================ {
+set foldmethod=indent   " fold based on indent level
+set foldnestmax=10      " max 10 depth
+set foldenable          " Auto fold code
+nnoremap <space> za
+set foldlevelstart=10   " start with fold level of 1
+" }
+
 "  ================ UI layout ================ {
 set fillchars=""
 set scrolloff=7            " Set 7 lines to the cursor - when moving vertically using j/k
