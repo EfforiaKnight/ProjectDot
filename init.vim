@@ -1,10 +1,42 @@
-﻿"  ================ Constantine Gusev ================
+﻿"  ================ EfforiaKnight ================
 "  ================ Modeline and Notes ================ {
 " vim: foldmarker={,} foldmethod=marker foldlevel=0:
 " }
 
+"  ================ Vim-Plug auto install ================ {
+if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+" }
+
+"  ================ Plugins ================ {
+call plug#begin('~/.local/share/nvim/plugged')
+Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
+Plug 'lifepillar/vim-solarized8'
+Plug 'tomasr/molokai'
+
+" Code support
+Plug 'Yggdroot/indentLine'
+Plug 'sheerun/vim-polyglot'
+Plug 'sbdchd/neoformat'
+Plug 'w0rp/ale'
+Plug 'jiangmiao/auto-pairs'
+
+" Python support
+Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+
+" Icons plugin
+Plug 'ryanoasis/vim-devicons'
+call plug#end()
+" }
+
 "  ================ Colors ================ {
 syntax enable              " Enable syntax highlighting.
+set termguicolors
+set background=dark
+colorscheme solarized8_dark
 " }
 
 "  ================ Encoding ================ {
@@ -13,40 +45,52 @@ set fileencoding=utf-8
 set fileencodings=utf-8
 " }
 
-" ================ Leader Map ================ {
-let mapleader=','
-" }
-
 " ================ Folds ================ {
-set foldmethod=indent   " fold based on indent level
-set foldnestmax=10      " max 10 depth
-set foldenable          " Auto fold code
+set foldmethod=indent      " fold based on indent level
+set foldnestmax=10         " max 10 depth
+set foldenable             " Auto fold code
 nnoremap <space> za
-set foldlevelstart=10   " start with fold level of 1
+set foldlevelstart=10      " start with fold level of 1
 " }
 
 "  ================ UI layout ================ {
-set fillchars=""
 set scrolloff=7            " Set 7 lines to the cursor - when moving vertically using j/k
 set relativenumber         " Set relative number column
 set number                 " Display line numbers
-set ruler                  "Always show current position
-set wildmenu
-set wildmode=list:longest,list:full
+set ruler                  " Always show current position
+
+" Only have cursorline in current window and in normal window
+autocmd WinLeave * set nocursorline
+autocmd WinEnter * set cursorline
+autocmd InsertEnter * set nocursorline
+autocmd InsertLeave * set cursorline
+
+set wildmenu               " Show list instead of just completing
+set wildmode=list:longest,full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
+
 set laststatus  =2         " Always show statusline.
-set showmode               " Show current mode in command-line.
+set noshowmode             " Show current mode in command-line.
 set showcmd                " Show already typed keys when more are expected.
+set shortmess=at           " Avoids hit enter
+set report      =0         " Always report changed lines.
+
 set splitbelow             " Open new windows below the current window.
 set splitright             " Open new windows right of the current window.
-set report      =0         " Always report changed lines.
 " }
 
 "  ================ UI Special chars ================ {
 set list                   " Show non-printable characters.
 set showbreak=↪\
 set linebreak
-set listchars=tab:▸\ ,extends:❯,precedes:❮,nbsp:±,eol:¬,nbsp:␣,trail:•
+set listchars=tab:▸\ ,extends:❯,precedes:❮,nbsp:±,eol:¬
+set fillchars=diff:⣿,vert:│ " Change fillchars
+
+augroup trailing " Only show trailing whitespace when not in insert mode
+    autocmd!
+    autocmd InsertEnter * :set listchars-=trail:⌴
+    autocmd InsertLeave * :set listchars+=trail:⌴
+augroup END
 " }
 
 "  ================ Spaces & Tabs ================ {
@@ -61,8 +105,9 @@ filetype plugin indent on  " Load plugins according to detected filetype.
 "  ================ Misc  ================ {
 set hidden                 " Enable hidden buffers
 set clipboard^=unnamedplus " Make default clipboard, system clipboard
-set backspace   =indent,eol,start  " Make backspace work as you would expect.
+set backspace =indent,eol,start  " Make backspace work as you would expect.
 set lazyredraw             " Only redraw when necessary.
+set autoread
 " The fish shell is not very compatible to other shells and unexpectedly
 " breaks things that use 'shell'.
 if &shell =~# 'fish$'
@@ -82,10 +127,15 @@ if has('nvim')
 endif
 " }
 
+" ================ Leader Map ================ {
+let mapleader=','
+let maplocalleader = "\\"
+" }
+
 " ================ Custom mappings ================ {
 " Clear search by Tim Pope https://github.com/tpope/vim-sensible/blob/master/plugin/sensible.vim
 "nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
-nnoremap <silent> <C-l> :nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
+nnoremap <silent> <A-l> :nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 nmap <silent> n :norm! nzzzv<CR>
 nmap <silent> N :norm! Nzzzv<CR>
 noremap j gj
@@ -96,15 +146,109 @@ nnoremap <silent> p p`]
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>rv :source $MYVIMRC<cr>
 
+" Navigate buffers
+nnoremap <silent> <A-right> :bn<CR>
+nnoremap <silent> <A-left> :bp<CR>
+
+" Split
+noremap <Leader>h :<C-u>split<CR>
+noremap <Leader>v :<C-u>vsplit<CR>
+
+" Easier split navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+nnoremap <leader>; ,
+
 " Move selected lines up and down
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
+
+" Select last pasted text
+nnoremap gp `[v`]
+
+" Use Tab and S-Tab to select candidate
+inoremap <expr><Tab>  pumvisible() ? "\<C-N>" : "\<Tab>"
+inoremap <expr><S-Tab> pumvisible() ? "\<C-P>" : "\<S-Tab>"
+
+" visual indentation (from vimbits)
+vnoremap < <gv
+vnoremap > >gv
+
+" Switch between the last two files
+nnoremap <leader><leader> <c-^>
 
 " Insert empty line above or below
 nnoremap <silent> <leader>o :<C-u>call append(line("."),   repeat([""], v:count1))<CR>
 nnoremap <silent> <leader>O :<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>
 " nnoremap <leader>O  :<c-u>put! =repeat(nr2char(10), v:count1)<cr>'[+1
 " nnoremap <leader>o :<c-u>put =repeat(nr2char(10), v:count1)<cr>']-1
+
+" Search visual selected text with * and #
+function! s:VSetSearch()
+  let temp = @@
+  norm! gvy
+  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
+  let @@ = temp
+endfunction
+
+vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
+vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
+" }
+
+" ================ Auto Commands ================ {
+" vim-python
+augroup vimrc-python
+    autocmd!
+    autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8
+        \ formatoptions+=croq softtabstop=4
+        \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+    autocmd FileType python let python_highlight_all=1
+    autocmd FileType python setlocal completeopt-=preview
+augroup END
+
+augroup vimrcEx
+    autocmd!
+    " When editing a file, always jump to the last known cursor position.
+    " Don't do it for commit messages, when the position is invalid, or when
+    " inside an event handler (happens when dropping a file on gvim).
+    autocmd BufReadPost *
+      \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
+      \   exe "normal g`\"" |
+      \ endif
+augroup END
+" }
+
+" ================ Plugin: Neoformat configurations ================ {
+let g:neoformat_enabled_python = ['yapf','autopep8']
+nnoremap <leader>= :<C-u>Neoformat<cr>
+" }
+
+" ================ Plugin: IndentLine configurations ================ {
+" IndentLine
+let g:indentLine_enabled = 1
+let g:indentLine_char = '┆'
+let g:indentLine_faster = 1
+" }
+
+" ================ Plugin: Airline configurations ================ {
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#buffer_nr_format = '%s '
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamecollapse = 0
+let g:airline#extensions#tabline#fnamemod = ':t'
+" }
+
+" ================ Plugin: Jedi configurations ================ {
+let g:jedi#use_splits_not_buffers = "winwidth"
+" }
+
+" ================ Plugin: ALE configurations ================ {
+let g:ale_linters = {
+\   'python': ['flake8'],
+\}
 " }
 
 " ================ Backups ================ {
@@ -116,6 +260,7 @@ set backupdir   =$HOME/.local/share/nvim/backup/
 set backupext   =-vimbackup
 set backupskip  =
 " set directory   =$HOME/.config/nvim/files/swap/
+set spellfile   =$HOME/.local/share/nvim/spell/en.utf-8.add
 set updatecount =100
 set undofile
 " set undodir     =$HOME/.config/nvim/files/undo/
