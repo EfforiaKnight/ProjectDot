@@ -21,8 +21,10 @@ Plug 'tomasr/molokai'
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'sbdchd/neoformat'
-Plug 'w0rp/ale'
+"Plug 'w0rp/ale'
+Plug 'neomake/neomake'
 Plug 'jiangmiao/auto-pairs'
+Plug 'majutsushi/tagbar'
 
 " Python support
 Plug 'davidhalter/jedi-vim', { 'for': 'python' }
@@ -49,7 +51,6 @@ set fileencodings=utf-8
 set foldmethod=indent      " fold based on indent level
 set foldnestmax=10         " max 10 depth
 set foldenable             " Auto fold code
-nnoremap <space> za
 set foldlevelstart=10      " start with fold level of 1
 " }
 
@@ -146,6 +147,9 @@ nnoremap <silent> p p`]
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>rv :source $MYVIMRC<cr>
 
+" Open/close folds
+nnoremap <space> za
+
 " Navigate buffers
 nnoremap <silent> <A-right> :bn<CR>
 nnoremap <silent> <A-left> :bp<CR>
@@ -195,6 +199,20 @@ endfunction
 
 vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
+
+" If you are in a split window, Alt-k closes the window.
+" If there is only one window (no split), Alt-k closes the current buffer.
+" This way you don't need to memorize two shortcuts for each operation.
+function! CloseWindowOrBuffer()
+    if winnr('$') > 1    " there is more than one window, i.e. there is a split
+        call feedkeys("\<c-w>q")
+    else
+        call feedkeys(":bd\<cr>")
+    endif
+endfunction
+
+nnoremap <A-k> :call CloseWindowOrBuffer()<cr>
+inoremap <A-k> <Esc>:call CloseWindowOrBuffer()<cr>
 " }
 
 " ================ Auto Commands ================ {
@@ -239,16 +257,37 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamecollapse = 0
 let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#ale#error_symbol = '⨉ '
+let g:airline#extensions#ale#warning_symbol = '⚠ '
 " }
 
 " ================ Plugin: Jedi configurations ================ {
-let g:jedi#use_splits_not_buffers = "winwidth"
+"let g:jedi#use_splits_not_buffers = "winwidth"
 " }
 
 " ================ Plugin: ALE configurations ================ {
-let g:ale_linters = {
-\   'python': ['flake8'],
-\}
+"let g:ale_linters = {
+"\   'python': ['flake8'],
+"\}
+"let g:ale_sign_error = '⨉'
+"let g:ale_sign_warning = '⚠️'
+"let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+" }
+
+" ================ Plugin: Neomake configurations ================ {
+" Run NeoMake on read and write operations
+autocmd! BufReadPost,BufWritePost * Neomake
+let g:neomake_python_enabled_makers = ['flake8', 'pep8', 'vulture']
+" E501 is line length of 80 characters
+let g:neomake_python_flake8_maker = { 'args': ['--ignore=E115,E266,E501,E302'], }
+let g:neomake_python_pep8_maker = { 'args': ['--max-line-length=100', '--ignore=E115,E266,E302'], }
+"let g:neomake_highlight_columns = 0
+" Neomake and other build commands (ctrl-b)
+nnoremap <C-b> :w<cr>:Neomake<cr>
+" }
+
+" ================ Plugin: Neomake configurations ================ {
+nmap <F8> :TagbarToggle<CR>
 " }
 
 " ================ Backups ================ {
