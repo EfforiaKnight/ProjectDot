@@ -15,7 +15,10 @@ endif
 call plug#begin('~/.local/share/nvim/plugged')
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 Plug 'lifepillar/vim-solarized8'
-Plug 'tomasr/molokai'
+Plug 'joshdick/onedark.vim'
+"Plug 'tomasr/molokai'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'jlanzarotta/bufexplorer'
 
 " Code support
 Plug 'Yggdroot/indentLine'
@@ -38,6 +41,7 @@ call plug#end()
 syntax enable              " Enable syntax highlighting.
 set termguicolors
 set background=dark
+"let g:onedark_terminal_italics=1
 colorscheme solarized8_dark
 " }
 
@@ -48,10 +52,10 @@ set fileencodings=utf-8
 " }
 
 " ================ Folds ================ {
-set foldmethod=indent      " fold based on indent level
-set foldnestmax=10         " max 10 depth
-set foldenable             " Auto fold code
-set foldlevelstart=10      " start with fold level of 1
+"set foldmethod=indent      " fold based on indent level
+"set foldnestmax=10         " max 10 depth
+"set foldenable             " Auto fold code
+"set foldlevelstart=10      " start with fold level of 1
 " }
 
 "  ================ UI layout ================ {
@@ -69,6 +73,7 @@ autocmd InsertLeave * set cursorline
 set wildmenu               " Show list instead of just completing
 set wildmode=list:longest,full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
+set wildignorecase
 
 set laststatus  =2         " Always show statusline.
 set noshowmode             " Show current mode in command-line.
@@ -114,6 +119,9 @@ set autoread
 if &shell =~# 'fish$'
   set shell=/bin/bash
 endif
+
+set spelllang=en  " English only
+set nospell       " disabled by default
 " }
 
 " ================ Search ================ {
@@ -130,7 +138,7 @@ endif
 
 " ================ Leader Map ================ {
 let mapleader=','
-let maplocalleader = "\\"
+let maplocalleader="\\"
 " }
 
 " ================ Custom mappings ================ {
@@ -145,24 +153,26 @@ vnoremap <silent> y y`]
 vnoremap <silent> p p`]
 nnoremap <silent> p p`]
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <leader>rv :source $MYVIMRC<cr>
+nnoremap <leader>rv :source $MYVIMRC<CR>:redraw<CR>:echo $MYVIMRC 'Reloaded'<CR>
 
 " Open/close folds
 nnoremap <space> za
 
 " Navigate buffers
-nnoremap <silent> <A-right> :bn<CR>
-nnoremap <silent> <A-left> :bp<CR>
+nnoremap <silent> <A-]> :bn<CR>
+nnoremap <silent> <A-[> :bp<CR>
 
 " Split
 noremap <Leader>h :<C-u>split<CR>
 noremap <Leader>v :<C-u>vsplit<CR>
 
 " Easier split navigation
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+"nnoremap <C-h> <C-w>h
+"nnoremap <C-j> <C-w>j
+"nnoremap <C-k> <C-w>k
+"nnoremap <C-l> <C-w>l
+
+" Jump to previous match fith f/t/F/T
 nnoremap <leader>; ,
 
 " Move selected lines up and down
@@ -172,16 +182,27 @@ vnoremap K :m '<-2<CR>gv=gv
 " Select last pasted text
 nnoremap gp `[v`]
 
+" make Y consistent with C and D by yanking up to end of line
+noremap Y y$
+
 " Use Tab and S-Tab to select candidate
 inoremap <expr><Tab>  pumvisible() ? "\<C-N>" : "\<Tab>"
 inoremap <expr><S-Tab> pumvisible() ? "\<C-P>" : "\<S-Tab>"
 
-" visual indentation (from vimbits)
-vnoremap < <gv
-vnoremap > >gv
+" Maps for indentation in normal mode
+nnoremap <tab> >>
+nnoremap <s-tab> <<
+
+" Indenting in visual mode
+xnoremap <tab> >gv
+xnoremap <s-tab> <gv
 
 " Switch between the last two files
 nnoremap <leader><leader> <c-^>
+
+" scroll slightly faster
+nnoremap <C-e> 2<C-e>
+nnoremap <C-y> 2<C-y>
 
 " Insert empty line above or below
 nnoremap <silent> <leader>o :<C-u>call append(line("."),   repeat([""], v:count1))<CR>
