@@ -182,8 +182,11 @@ vnoremap K :m '<-2<CR>gv=gv
 " Select last pasted text
 nnoremap gp `[v`]
 
-" make Y consistent with C and D by yanking up to end of line
+" Make Y consistent with C and D by yanking up to end of line
 noremap Y y$
+
+" Escape to normal mode in terminal
+tnoremap <Esc> <C-\><C-n>
 
 " Use Tab and S-Tab to select candidate
 inoremap <expr><Tab>  pumvisible() ? "\<C-N>" : "\<Tab>"
