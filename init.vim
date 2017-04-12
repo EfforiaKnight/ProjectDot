@@ -205,6 +205,8 @@ nnoremap <s-tab> <<
 xnoremap <tab> >gv
 xnoremap <s-tab> <gv
 
+" Restoring next list jump with remaping
+nnoremap <A-o> <c-i>
 " Switch between the last two files
 nnoremap <leader><leader> <c-^>
 
