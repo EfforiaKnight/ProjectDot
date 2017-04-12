@@ -285,8 +285,8 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamecollapse = 0
 let g:airline#extensions#tabline#fnamemod = ':t'
-let g:airline#extensions#ale#error_symbol = '⨉ '
-let g:airline#extensions#ale#warning_symbol = '⚠ '
+" let g:airline#extensions#ale#error_symbol = '⨉ '
+" let g:airline#extensions#ale#warning_symbol = '⚠ '
 " }
 
 " ================ Plugin: Jedi configurations ================ {
