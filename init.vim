@@ -1,4 +1,4 @@
-﻿"  ================ EfforiaKnight ================
+"  ================ EfforiaKnight ================
 "  ================ Modeline and Notes ================ {
 " vim: foldmarker={,} foldmethod=marker foldlevel=0:
 " }
@@ -74,6 +74,7 @@ set wildmenu               " Show list instead of just completing
 set wildmode=list:longest,full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
 set wildignorecase
+set browsedir=buffer       " browse files in same dir as open file
 
 set laststatus  =2         " Always show statusline.
 set noshowmode             " Show current mode in command-line.
@@ -86,11 +87,12 @@ set splitright             " Open new windows right of the current window.
 " }
 
 "  ================ UI Special chars ================ {
-set list                   " Show non-printable characters.
+set list                    " Show non-printable characters.
 set showbreak=↪\
 set linebreak
-set listchars=tab:▸\ ,extends:❯,precedes:❮,nbsp:±,eol:¬
+set listchars=tab:▸\ ,extends:❯,precedes:❮,nbsp:⣿,eol:¬
 set fillchars=diff:⣿,vert:│ " Change fillchars
+set diffopt=vertical        " Use in vertical diff mode
 
 augroup trailing " Only show trailing whitespace when not in insert mode
     autocmd!
@@ -114,6 +116,8 @@ set clipboard^=unnamedplus " Make default clipboard, system clipboard
 set backspace =indent,eol,start  " Make backspace work as you would expect.
 set lazyredraw             " Only redraw when necessary.
 set autoread
+set nojoinspaces           " J command doesn't add extra space
+
 " The fish shell is not very compatible to other shells and unexpectedly
 " breaks things that use 'shell'.
 if &shell =~# 'fish$'
