@@ -195,6 +195,7 @@ tnoremap <Esc> <C-\><C-n>
 " Use Tab and S-Tab to select candidate
 inoremap <expr><Tab>  pumvisible() ? "\<C-N>" : "\<Tab>"
 inoremap <expr><S-Tab> pumvisible() ? "\<C-P>" : "\<S-Tab>"
+inoremap <expr><cr> pumvisible() ? "\<C-y>" : "\<cr>"
 
 " Maps for indentation in normal mode
 nnoremap <tab> >>
@@ -245,14 +246,18 @@ inoremap <A-k> <Esc>:call CloseWindowOrBuffer()<cr>
 
 " ================ Auto Commands ================ {
 " vim-python
-augroup vimrc-python
+augroup neo-python
     autocmd!
     autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8
         \ formatoptions+=croq softtabstop=4
         \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
     autocmd FileType python let python_highlight_all=1
+" http://vi.stackexchange.com/questions/8772/how-can-i-fix-missing-syntax-highlighting-for-python-keywords-such-as-self/8773#8773
+    autocmd FileType python
+                \   syn keyword pythonSelf self
+                \ | highlight def link pythonSelf Special
     autocmd FileType python setlocal completeopt-=preview
-augroup END
+"augroup END
 
 augroup vimrcEx
     autocmd!
@@ -305,16 +310,17 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 " ================ Plugin: Neomake configurations ================ {
 " Run NeoMake on read and write operations
 autocmd! BufReadPost,BufWritePost * Neomake
-let g:neomake_python_enabled_makers = ['flake8', 'pep8', 'vulture']
+"let g:neomake_python_enabled_makers = ['pylama']
 " E501 is line length of 80 characters
-let g:neomake_python_flake8_maker = { 'args': ['--ignore=E115,E266,E501,E302'], }
-let g:neomake_python_pep8_maker = { 'args': ['--max-line-length=100', '--ignore=E115,E266,E302'], }
-"let g:neomake_highlight_columns = 0
+"let g:neomake_python_flake8_maker = { 'args': ['--ignore=E115,E266,E501,E302'], }
+" General Neomake configuration
+"let g:neomake_open_list=2
+"let g:neomake_list_height=7
 " Neomake and other build commands (ctrl-b)
 nnoremap <C-b> :w<cr>:Neomake<cr>
 " }
 
-" ================ Plugin: Neomake configurations ================ {
+" ================ Plugin: Tagbar configurations ================ {
 nmap <F8> :TagbarToggle<CR>
 " }
 
