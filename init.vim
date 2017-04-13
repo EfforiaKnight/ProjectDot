@@ -259,7 +259,7 @@ augroup neo-python
                 \   syn keyword pythonSelf self
                 \ | highlight def link pythonSelf Special
     autocmd FileType python setlocal completeopt-=preview
-"augroup END
+augroup END
 
 augroup vimrcEx
     autocmd!
