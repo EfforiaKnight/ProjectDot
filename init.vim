@@ -18,7 +18,6 @@ Plug 'lifepillar/vim-solarized8'
 Plug 'joshdick/onedark.vim'
 "Plug 'tomasr/molokai'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'jlanzarotta/bufexplorer'
 
 " Code support
 Plug 'Yggdroot/indentLine'
@@ -60,7 +59,7 @@ set fileencodings=utf-8
 
 "  ================ UI layout ================ {
 set scrolloff=7            " Set 7 lines to the cursor - when moving vertically using j/k
-set relativenumber         " Set relative number column
+"set relativenumber         " Set relative number column
 set number                 " Display line numbers
 set ruler                  " Always show current position
 
@@ -257,9 +256,9 @@ augroup neo-python
 " http://vi.stackexchange.com/questions/8772/how-can-i-fix-missing-syntax-highlighting-for-python-keywords-such-as-self/8773#8773
     autocmd FileType python
                 \   syn keyword pythonSelf self
-                \ | highlight def link pythonSelf Special
+                \ | highlight def pythonSelf cterm=italic,bold gui=italic,bold ctermfg=9 guifg=#cb4b16
     autocmd FileType python setlocal completeopt-=preview
-"augroup END
+augroup END
 
 augroup vimrcEx
     autocmd!
