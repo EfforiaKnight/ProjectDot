@@ -1,0 +1,87 @@
+h
+tip
+h tips
+set
+h con
+set check 1
+h con
+set max_res 720p
+set
+set max_res 720
+h player
+set
+h
+h bas
+h
+h se
+h
+h e
+h
+h d
+h
+h dl-
+h
+h enc
+encoders
+h
+h pla
+h
+h invo
+h
+h con
+h
+h c
+h con
+q
+ls
+fzf
+history
+2
+mix 4
+*
+his
+hist
+history
+1
+*
+history
+*
+//nightcore
+h sea
+h
+h new
+h
+h invoke
+h
+h bas
+h
+h ed
+h
+h pla
+h
+h conf
+set columns
+h conf
+set ddir /home/Efforia/Music
+set ddir /home/efforia/Music
+h
+h conf
+set columns views date likes
+h conf
+set set_title true
+h encoder
+set h
+h window
+set window_pos bottom-right
+h window
+set window_size 320x240
+h notifier
+set
+h notif
+h conf
+/nightcore
+*
+h conf
+set notifier notify-send
+/nightcore
+2

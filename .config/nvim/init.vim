@@ -27,6 +27,8 @@ Plug 'sbdchd/neoformat'
 Plug 'neomake/neomake'
 Plug 'jiangmiao/auto-pairs'
 Plug 'majutsushi/tagbar'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 " Python support
 Plug 'davidhalter/jedi-vim', { 'for': 'python' }
@@ -89,14 +91,14 @@ set splitright             " Open new windows right of the current window.
 set list                    " Show non-printable characters.
 set showbreak=↪\
 set linebreak
-set listchars=tab:▸\ ,extends:❯,precedes:❮,nbsp:⣿,eol:¬
+set listchars=tab:▸\ ,extends:❯,precedes:❮,nbsp:⣿,eol:¬,trail:•
 set fillchars=diff:⣿,vert:│ " Change fillchars
 set diffopt=vertical        " Use in vertical diff mode
 
 augroup trailing " Only show trailing whitespace when not in insert mode
     autocmd!
-    autocmd InsertEnter * :set listchars-=trail:⌴
-    autocmd InsertLeave * :set listchars+=trail:⌴
+    autocmd InsertEnter * :set listchars-=trail:•
+    autocmd InsertLeave * :set listchars+=trail:•
 augroup END
 " }
 
@@ -262,7 +264,9 @@ augroup END
 
 augroup neo-markdown
     autocmd!
-    autocmd FileType markdown setlocal concealcursor=nc
+    autocmd FileType markdown setlocal concealcursor=nc conceallevel=2
+    " Enable spellchecking for Markdown
+    autocmd FileType markdown setlocal spell
 augroup END
 
 augroup vimrcEx
@@ -284,9 +288,9 @@ nnoremap <leader>= :<C-u>Neoformat<cr>
 
 " ================ Plugin: IndentLine configurations ================ {
 " IndentLine
-let g:indentLine_enabled = 1
 let g:indentLine_char = '┆'
-let g:indentLine_faster = 1
+"let g:indentLine_faster = 1
+let g:indentLine_fileTypeExclude = ['markdown']
 " }
 
 " ================ Plugin: Airline configurations ================ {
