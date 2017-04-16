@@ -14,3 +14,18 @@
     - _Trigger_ = _Media Play_
     - _Action_ = `playerctl play-pause`
     - **Enjoy**
+
+* **Vimium configurations**
+_Mapping_
+    ```
+    # Insert your preferred key mappings here.
+    map s Vomnibar.activateInNewTab keyword=g
+    map w Vomnibar.activateInNewTab keyword=y
+    map q Vomnibar.activateInNewTab keyword=d
+
+    # Add an additional mapping for Escape:
+    mapkey <c-c> <c-[>
+
+    # Visit previous Tab
+    map <c-`> visitPreviousTab
+    ```
