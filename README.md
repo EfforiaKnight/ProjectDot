@@ -15,8 +15,7 @@
     - _Action_ = `playerctl play-pause`
     - **Enjoy**
 
-* **Vimium configurations**  
-_Mapping_
+* **Vimium configurations mapping**
     ```
     # Insert your preferred key mappings here.
     map s Vomnibar.activateInNewTab keyword=g
