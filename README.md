@@ -15,7 +15,7 @@
     - _Action_ = `playerctl play-pause`
     - **Enjoy**
 
-* **Vimium configurations**
+* **Vimium configurations**  
 _Mapping_
     ```
     # Insert your preferred key mappings here.
