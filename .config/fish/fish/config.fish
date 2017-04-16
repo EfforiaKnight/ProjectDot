@@ -2,9 +2,12 @@ set -g theme_nerd_fonts yes
 set -g theme_color_scheme solarized
 set -g fish_prompt_pwd_dir_length 0
 set -g theme_title_use_abbreviated_path no
-set -g theme_date_format "+%a %H:%M"
+#set -g theme_date_format "+%a %H:%M"
+set -g theme_display_date no
 set -x EDITOR nvim
 set -x TERM xterm-256color-italic
+
+set -x FZF_DEFAULT_COMMAND 'ag --hidden -l -g ""'
 
 function mkd --description 'mkdir -p and cd into'
     mkdir -p $argv

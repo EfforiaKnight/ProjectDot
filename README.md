@@ -28,3 +28,10 @@
     # Visit previous Tab
     map <c-`> visitPreviousTab
     ```
+
+* **FZF with Locate command**  
+    - Set `FZF_LOCATE_OPTS` to the following.
+    Bind set to `<C-s>`
+    ```
+    set -U FZF_LOCATE_OPTS "--preview" "rougify {} 2>/dev/null" "--header-lines=1"
+    ```

@@ -3,6 +3,10 @@ function fish_user_key_bindings
     bind \cg 'fs'
     ### Tmux ###
 
+    ### Locate+FZF ###
+    bind \cs '__fzf_locate'
+    ### Locate+FZF ###
+
     ### fzf ###
     set -q FZF_LEGACY_KEYBINDINGS
     or set -l FZF_LEGACY_KEYBINDINGS 1
@@ -33,7 +37,6 @@ function fish_user_key_bindings
             bind -M insert \eD '__fzf_cd_with_hidden'
         end
     end
+
     ### fzf ###
 end
-
-fzf_key_bindings
