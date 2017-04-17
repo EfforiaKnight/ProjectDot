@@ -18,6 +18,9 @@ Plug 'lifepillar/vim-solarized8'
 Plug 'joshdick/onedark.vim'
 "Plug 'tomasr/molokai'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'haya14busa/incsearch.vim'
+Plug 'haya14busa/vim-asterisk'
+Plug 'scrooloose/nerdtree'
 
 " Code support
 Plug 'Yggdroot/indentLine'
@@ -75,7 +78,6 @@ set wildmenu               " Show list instead of just completing
 set wildmode=list:longest,full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
 set wildignorecase
-set browsedir=buffer       " browse files in same dir as open file
 
 set laststatus  =2         " Always show statusline.
 set noshowmode             " Show current mode in command-line.
@@ -91,14 +93,14 @@ set splitright             " Open new windows right of the current window.
 set list                    " Show non-printable characters.
 set showbreak=↪\
 set linebreak
-set listchars=tab:▸\ ,extends:❯,precedes:❮,nbsp:⣿,eol:¬,trail:•
+set listchars=tab:▸\ ,extends:❯,precedes:❮,eol:¬,trail:·
 set fillchars=diff:⣿,vert:│ " Change fillchars
 set diffopt=vertical        " Use in vertical diff mode
 
 augroup trailing " Only show trailing whitespace when not in insert mode
     autocmd!
-    autocmd InsertEnter * :set listchars-=trail:•
-    autocmd InsertLeave * :set listchars+=trail:•
+    autocmd InsertEnter * :set listchars-=trail:·
+    autocmd InsertLeave * :set listchars+=trail:·
 augroup END
 " }
 
@@ -127,6 +129,9 @@ endif
 
 set spelllang=en  " English only
 set nospell       " disabled by default
+
+" Disable tmux navigator when zooming the Vim pane. [vim-tmux-navigator]
+let g:tmux_navigator_disable_when_zoomed = 1
 " }
 
 " ================ Search ================ {
@@ -139,6 +144,20 @@ set synmaxcol   =200       " Only highlight the first 200 columns.
 if has('nvim')
     set inccommand=nosplit " Multiple substitute in window
 endif
+
+let g:incsearch#highlight = {
+\   'match' : {
+\     'group' : 'IncSearchUnderline',
+\     'priority' : '10'
+\   },
+\   'on_cursor' : {
+\     'priority' : '100'
+\   },
+\   'cursor' : {
+\     'group' : 'ErrorMsg',
+\     'priority' : '1000'
+\   }
+\ }
 " }
 
 " ================ Leader Map ================ {
@@ -158,7 +177,10 @@ vnoremap <silent> y y`]
 vnoremap <silent> p p`]
 nnoremap <silent> p p`]
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <leader>rv :source $MYVIMRC<CR>:redraw<CR>:echo $MYVIMRC 'Reloaded'<CR>
+nnoremap <leader>rv :source $MYVIMRC<CR>:redraw<CR>:noh<CR>:echo $MYVIMRC 'Reloaded'<CR>
+
+" Change to current working directory
+nnoremap ,cd :cd %:p:h<CR>:pwd<CR>
 
 " Open/close folds
 nnoremap <space> za
@@ -209,7 +231,7 @@ xnoremap <s-tab> <gv
 " Restoring next list jump with remaping
 nnoremap <A-o> <c-i>
 " Switch between the last two files
-nnoremap <leader><leader> <c-^>
+"nnoremap <leader><leader> <c-^>
 
 " scroll slightly faster
 nnoremap <C-e> 2<C-e>
@@ -222,15 +244,15 @@ nnoremap <silent> <leader>O :<C-u>call append(line(".")-1, repeat([""], v:count1
 " nnoremap <leader>o :<c-u>put =repeat(nr2char(10), v:count1)<cr>']-1
 
 " Search visual selected text with * and #
-function! s:VSetSearch()
-  let temp = @@
-  norm! gvy
-  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
-  let @@ = temp
-endfunction
-
-vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
-vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
+"function! s:VSetSearch()
+"  let temp = @@
+"  norm! gvy
+"  let @/ = '\V' . substitute(escape(@@, '\'), '\n', '\\n', 'g')
+"  let @@ = temp
+"endfunction
+"
+"vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
+"vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 " If you are in a split window, Alt-k closes the window.
 " If there is only one window (no split), Alt-k closes the current buffer.
@@ -281,6 +303,75 @@ augroup vimrcEx
 augroup END
 " }
 
+" ================ Plugin: FZF configurations ================ {
+" set fzf's default input to AG instead of find. This also removes gitignore etc
+let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
+let $FZF_DEFAULT_OPTS .= ' --inline-info'
+"let &grepprg = 'ag --nogroup --nocolor --column'
+"command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+command! -bang -nargs=* MRU
+  \ call fzf#vim#history(fzf#vim#with_preview('right:50%:hidden', '?'), <bang>0)
+
+let s:ag_options = ' --one-device --hidden --ignore .git'
+command! -bang -nargs=* Ag
+  \ call fzf#vim#ag(<q-args>,
+  \                  s:ag_options,
+  \                 <bang>0 ? fzf#vim#with_preview('down:60%')
+  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+  \                 <bang>0)
+
+" nnoremap <silent> <Leader><Leader> :Files<CR>
+nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+nnoremap <silent> <Leader><Enter>  :Buffers<CR>
+
+nnoremap <silent> <Leader>ag       :Ag <C-R><C-W><CR>
+nnoremap <silent> <Leader>AG       :Ag <C-R>=expand("<cWORD>")<CR><CR>
+xnoremap <silent> <Leader>ag       y:Ag <C-R>"<CR>
+nnoremap <silent> <Leader>`        :Marks<CR>
+nnoremap <silent> <Leader>/        :Ag <CR>
+
+nnoremap <silent> q: :History:<CR>
+nnoremap <silent> q/ :History/<CR>
+nnoremap <silent> <leader>; :Lines<CR>
+nnoremap <silent> <Leader>? :Helptags<CR>
+nnoremap <silent> <Leader>p :MRU<CR>
+
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-j> <plug>(fzf-complete-file-ag)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+
+nmap <leader><tab> :Windows<CR>
+" }
+
+" ================ Plugin: Neoformat configurations ================ {
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+
+let g:incsearch#auto_nohlsearch = 1
+map n  <Plug>(incsearch-nohl-n)
+map N  <Plug>(incsearch-nohl-N)
+
+" Keep cursor position across matches
+let g:asterisk#keeppos = 1
+
+" Emacs like keymaps
+let g:incsearch#emacs_like_keymap=1
+map *   <Plug>(incsearch-nohl)<Plug>(asterisk-*)
+map g*  <Plug>(incsearch-nohl)<Plug>(asterisk-g*)
+map #   <Plug>(incsearch-nohl)<Plug>(asterisk-#)
+map g#  <Plug>(incsearch-nohl)<Plug>(asterisk-g#)
+
+map z*  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
+map gz* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
+map z#  <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)
+map gz# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)
+" }
+
 " ================ Plugin: Neoformat configurations ================ {
 let g:neoformat_enabled_python = ['yapf','autopep8']
 nnoremap <leader>= :<C-u>Neoformat<cr>
@@ -295,13 +386,34 @@ let g:indentLine_fileTypeExclude = ['markdown']
 
 " ================ Plugin: Airline configurations ================ {
 let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#buffer_nr_format = '%s '
-let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#show_buffers = 0
+let g:airline#extensions#tabline#tab_nr_type = 2 " splits and tab number
 let g:airline#extensions#tabline#fnamecollapse = 0
 let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline#extensions#tabline#show_close_button = 0
+"let g:airline#extensions#tabline#buffer_nr_format = '%s '
+"let g:airline#extensions#tabline#buffer_nr_show = 0
 " let g:airline#extensions#ale#error_symbol = '⨉ '
 " let g:airline#extensions#ale#warning_symbol = '⚠ '
+
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+nmap <leader>[ <Plug>AirlineSelectPrevTab
+nmap <leader>] <Plug>AirlineSelectNextTab
+" }
+
+" ================ Plugin: NERDTree configurations ================ {
+let g:NERDTreeIgnore = ['\.vim$', '\~$', '\.beam', 'elm-stuff']
+let g:NERDTreeShowHidden = 1
+nnoremap <F4> :NERDTreeToggle<CR>
 " }
 
 " ================ Plugin: Jedi configurations ================ {
@@ -327,11 +439,12 @@ autocmd! BufReadPost,BufWritePost * Neomake
 "let g:neomake_open_list=2
 "let g:neomake_list_height=7
 " Neomake and other build commands (ctrl-b)
-nnoremap <C-b> :w<cr>:Neomake<cr>
+nnoremap <F5> :w<cr>:Neomake<cr>
 " }
 
 " ================ Plugin: Tagbar configurations ================ {
 nmap <F8> :TagbarToggle<CR>
+inoremap <F8> <esc>:TagbarToggle<CR>
 " }
 
 " ================ Backups ================ {
@@ -346,6 +459,8 @@ set backupskip  =
 set spellfile   =$HOME/.local/share/nvim/spell/en.utf-8.add
 set updatecount =100
 set undofile
+
+let g:fzf_history_dir = '~/.local/share/nvim/fzf-history'
 " set undodir     =$HOME/.config/nvim/files/undo/
 " set viminfo     ='100,n$HOME/files/info/viminfo
 " }

@@ -6,6 +6,7 @@ set -g theme_title_use_abbreviated_path no
 set -g theme_display_date no
 set -x EDITOR nvim
 set -x TERM xterm-256color-italic
+#set -x TERM screen-256color
 
 set -x FZF_DEFAULT_COMMAND 'ag --hidden -l -g ""'
 
