@@ -23,6 +23,9 @@ function mm --description 'Start listening to YouTube in CLI'
     mpv --no-video --ytdl-format=bestaudio ytdl://ytsearch10:"$argv"
 end
 
-function gcreate --description 'Create new Repository in GitHub (must define github.user with git config)'
-    curl -u (git config github.user) https://api.github.com/user/repos -d "{\"name\": \"$argv[1]\",\"description\": \"$argv[2]\"}"
+function gcreate --argument-names name description --description 'Create new Repository in GitHub {Name} {Description} (must define github.user with git config)'
+    if test -n $name -a -n $description
+        curl -u (git config github.user) https://api.github.com/user/repos -d "{\"name\": \"$name\",\"description\": \"$description\"}"
+    else
+        echo Please provide name and description of the branch!
 end
