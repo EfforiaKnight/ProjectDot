@@ -24,8 +24,9 @@ function mm --description 'Start listening to YouTube in CLI'
 end
 
 function gcreate --argument-names name description --description 'Create new Repository in GitHub {Name} {Description} (must define github.user with git config)'
-    if test -n $name -a -n $description
+    if test -n $name -a -n $description 2> /dev/null
         curl -u (git config github.user) https://api.github.com/user/repos -d "{\"name\": \"$name\",\"description\": \"$description\"}"
     else
         echo Please provide name and description of the branch!
+    end
 end
