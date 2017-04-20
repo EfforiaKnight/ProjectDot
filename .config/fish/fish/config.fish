@@ -8,7 +8,7 @@ set -x EDITOR nvim
 set -x TERM xterm-256color-italic
 #set -x TERM screen-256color
 
-set -x FZF_DEFAULT_COMMAND 'ag --hidden -l -g ""'
+set -x FZF_DEFAULT_COMMAND 'ag --hidden --ignore .git -g ""'
 
 function mkd --description 'mkdir -p and cd into'
     mkdir -p $argv
