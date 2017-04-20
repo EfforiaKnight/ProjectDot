@@ -1,1 +1,0 @@
-/home/efforia/.config/fisherman/await/functions/await.fish
