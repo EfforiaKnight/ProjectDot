@@ -1,8 +1,4 @@
 function fish_user_key_bindings
-    ### Tmux ###
-    bind \cg 'fs'
-    ### Tmux ###
-
     ### Locate+FZF ###
     bind \cs '__fzf_locate'
     ### Locate+FZF ###
