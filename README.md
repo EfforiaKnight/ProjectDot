@@ -33,5 +33,5 @@
     - Set `FZF_LOCATE_OPTS` to the following.
     Bind set to `<C-s>`
     ```
-    set -Ux FZF_LOCATE_OPTS --preview  "rougify {} 2>/dev/null" --header-lines=1 --preview-window hidden --bind "?:toggle-preview" --toggle-sort=ctrl-r
+    set -U FZF_LOCATE_OPTS --preview  "rougify {} 2>/dev/null" --header-lines=1 --preview-window hidden --bind "?:toggle-preview"
     ```
