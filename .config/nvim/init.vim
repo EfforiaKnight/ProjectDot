@@ -147,7 +147,7 @@ endif
 
 let g:incsearch#highlight = {
 \   'match' : {
-\     'group' : 'IncSearchUnderline',
+    \     'group' : 'IncSearchUnderline',
 \     'priority' : '10'
 \   },
 \   'on_cursor' : {
@@ -186,8 +186,8 @@ nnoremap ,cd :cd %:p:h<CR>:pwd<CR>
 nnoremap <space> za
 
 " Navigate buffers
-nnoremap <silent> <A-]> :bn<CR>
-nnoremap <silent> <A-[> :bp<CR>
+"nnoremap <silent> <A-]> :bn<CR>
+"nnoremap <silent> <A-[> :bp<CR>
 
 " Split
 noremap <Leader>h :<C-u>split<CR>
@@ -255,13 +255,13 @@ nnoremap <silent> <leader>O :<C-u>call append(line(".")-1, repeat([""], v:count1
 "vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
 " If you are in a split window, Alt-k closes the window.
-" If there is only one window (no split), Alt-k closes the current buffer.
-" This way you don't need to memorize two shortcuts for each operation.
+" If there is only one window (no split), Alt-k closes the current buffer
+" and move to the previous one.
 function! CloseWindowOrBuffer()
     if winnr('$') > 1    " there is more than one window, i.e. there is a split
         call feedkeys("\<c-w>q")
     else
-        call feedkeys(":bd\<cr>")
+        call feedkeys(":bp |bd #<cr>")
     endif
 endfunction
 
@@ -347,7 +347,7 @@ imap <c-x><c-l> <plug>(fzf-complete-line)
 nmap <leader><tab> :Windows<CR>
 " }
 
-" ================ Plugin: Neoformat configurations ================ {
+" ================ Plugin: Incsearch configurations ================ {
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
@@ -387,9 +387,8 @@ let g:indentLine_fileTypeExclude = ['markdown']
 " ================ Plugin: Airline configurations ================ {
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#show_buffers = 0
-let g:airline#extensions#tabline#tab_nr_type = 2 " splits and tab number
-let g:airline#extensions#tabline#fnamecollapse = 0
+let g:airline#extensions#tabline#show_buffers = 1
+let g:airline#extensions#tabline#show_tabs = 0
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#tabline#show_close_button = 0
 "let g:airline#extensions#tabline#buffer_nr_format = '%s '
@@ -397,17 +396,18 @@ let g:airline#extensions#tabline#show_close_button = 0
 " let g:airline#extensions#ale#error_symbol = '⨉ '
 " let g:airline#extensions#ale#warning_symbol = '⚠ '
 
-nmap <leader>1 <Plug>AirlineSelectTab1
-nmap <leader>2 <Plug>AirlineSelectTab2
-nmap <leader>3 <Plug>AirlineSelectTab3
-nmap <leader>4 <Plug>AirlineSelectTab4
-nmap <leader>5 <Plug>AirlineSelectTab5
-nmap <leader>6 <Plug>AirlineSelectTab6
-nmap <leader>7 <Plug>AirlineSelectTab7
-nmap <leader>8 <Plug>AirlineSelectTab8
-nmap <leader>9 <Plug>AirlineSelectTab9
-nmap <leader>[ <Plug>AirlineSelectPrevTab
-nmap <leader>] <Plug>AirlineSelectNextTab
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+nmap <A-1> <Plug>AirlineSelectTab1
+nmap <A-2> <Plug>AirlineSelectTab2
+nmap <A-3> <Plug>AirlineSelectTab3
+nmap <A-4> <Plug>AirlineSelectTab4
+nmap <A-5> <Plug>AirlineSelectTab5
+nmap <A-6> <Plug>AirlineSelectTab6
+nmap <A-7> <Plug>AirlineSelectTab7
+nmap <A-8> <Plug>AirlineSelectTab8
+nmap <A-9> <Plug>AirlineSelectTab9
+nmap <A-[> <Plug>AirlineSelectPrevTab
+nmap <A-]> <Plug>AirlineSelectNextTab
 " }
 
 " ================ Plugin: NERDTree configurations ================ {
