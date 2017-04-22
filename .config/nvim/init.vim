@@ -120,6 +120,7 @@ set backspace =indent,eol,start  " Make backspace work as you would expect.
 set lazyredraw             " Only redraw when necessary.
 set autoread
 set nojoinspaces           " J command doesn't add extra space
+set mouse=a                " Enable mouse
 
 " The fish shell is not very compatible to other shells and unexpectedly
 " breaks things that use 'shell'.
@@ -343,8 +344,6 @@ nnoremap <silent> <Leader>p :MRU<CR>
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
 imap <c-x><c-l> <plug>(fzf-complete-line)
-
-nmap <leader><tab> :Windows<CR>
 " }
 
 " ================ Plugin: Incsearch configurations ================ {
