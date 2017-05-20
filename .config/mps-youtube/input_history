@@ -85,3 +85,53 @@ h conf
 set notifier notify-send
 /nightcore
 2
+mix 1
+h invoke
+all
+//nightcore
+20, all
+20, all=a
+20, *
+20
+all
+//nightcore rock
+1, all
+1
+all
+10
+1
+shuffle
+*
+..
+/nightcore rock
+11
+23
+n
+15
+21
+n
+h
+h se
+h bas
+h 
+h pla
+h conf
+h
+h tips
+/nightcore
+1
+mix 20
+*
+/nightcore rabbit
+7
+mix 1, *
+mix 1,*
+mix 1
+*
+exit
+//nightcore sad
+23
+*
+/study music nordic
+2
+exit
