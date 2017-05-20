@@ -33,6 +33,7 @@ function fish_user_key_bindings
             bind -M insert \eD '__fzf_cd_with_hidden'
         end
     end
-
     ### fzf ###
 end
+
+fzf_key_bindings
