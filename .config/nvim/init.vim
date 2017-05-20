@@ -20,7 +20,13 @@ Plug 'joshdick/onedark.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/vim-asterisk'
-Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeFind', 'NERDTreeToggle'] }
+Plug 'tpope/vim-obsession'
+Plug 'junegunn/vim-peekaboo'
+Plug 'mhinz/vim-sayonara'
+
+" http://vim.wikia.com/wiki/Moving_through_camel_case_words
+" Plug 'chaoren/vim-wordmotion'
 
 " Code support
 Plug 'Yggdroot/indentLine'
@@ -32,9 +38,16 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'majutsushi/tagbar'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'tpope/vim-commentary'
+Plug 'tmhedberg/SimpylFold'
+Plug 'Konfekt/FastFold'
 
 " Python support
 Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+Plug 'zchee/deoplete-jedi', { 'for': 'python' }
+Plug 'Shougo/echodoc.vim', { 'for': 'python' }
+Plug 'Shougo/neopairs.vim', { 'for': 'python' }
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Icons plugin
 Plug 'ryanoasis/vim-devicons'
@@ -57,9 +70,9 @@ set fileencodings=utf-8
 
 " ================ Folds ================ {
 "set foldmethod=indent      " fold based on indent level
-"set foldnestmax=10         " max 10 depth
+set foldnestmax=1         " max 10 depth
 "set foldenable             " Auto fold code
-"set foldlevelstart=10      " start with fold level of 1
+set foldlevelstart=1        " start with fold level of 1
 " }
 
 "  ================ UI layout ================ {
@@ -121,15 +134,13 @@ set lazyredraw             " Only redraw when necessary.
 set autoread
 set nojoinspaces           " J command doesn't add extra space
 set mouse=a                " Enable mouse
+set guicursor=n-v-c-sm:block,i-ci-ve:ver25-iCursor-blinkwait300-blinkon200-blinkoff150,r-cr-o:hor20
 
 " The fish shell is not very compatible to other shells and unexpectedly
 " breaks things that use 'shell'.
 if &shell =~# 'fish$'
   set shell=/bin/bash
 endif
-
-set spelllang=en  " English only
-set nospell       " disabled by default
 
 " Disable tmux navigator when zooming the Vim pane. [vim-tmux-navigator]
 let g:tmux_navigator_disable_when_zoomed = 1
@@ -170,10 +181,40 @@ let maplocalleader="\\"
 " Clear search by Tim Pope https://github.com/tpope/vim-sensible/blob/master/plugin/sensible.vim
 "nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 nnoremap <silent> <A-l> :nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
-nmap <silent> n :norm! nzzzv<CR>
-nmap <silent> N :norm! Nzzzv<CR>
-noremap j gj
-noremap k gk
+
+" When jump to next match also center screen
+" Note: Use :norm! to make it count as one command. (i.e. for i_CTRL-o)
+nnoremap <silent> n :norm! nzz<CR>
+nnoremap <silent> N :norm! Nzz<CR>
+vnoremap <silent> n :norm! nzz<CR>
+vnoremap <silent> N :norm! Nzz<CR>
+
+" Same when moving up and down
+nnoremap <C-u> <C-u>zz
+nnoremap <C-d> <C-d>zz
+nnoremap <C-f> <C-f>zz
+nnoremap <C-b> <C-b>zz
+vnoremap <C-u> <C-u>zz
+vnoremap <C-d> <C-d>zz
+vnoremap <C-f> <C-f>zz
+vnoremap <C-b> <C-b>zz
+
+" Remap H and L (top, bottom of screen to left and right end of line)
+nnoremap H ^
+nnoremap L $
+vnoremap H ^
+vnoremap L g_
+
+" Visual linewise up and down by default (and use gj gk to go quicker)
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+
+" Don't yank to default register when changing something
+nnoremap c "xc
+xnoremap c "xc
+
 vnoremap <silent> y y`]
 vnoremap <silent> p p`]
 nnoremap <silent> p p`]
@@ -181,24 +222,17 @@ nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>rv :source $MYVIMRC<CR>:redraw<CR>:noh<CR>:echo $MYVIMRC 'Reloaded'<CR>
 
 " Change to current working directory
-nnoremap ,cd :cd %:p:h<CR>:pwd<CR>
+nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
 
 " Open/close folds
 nnoremap <space> za
-
-" Navigate buffers
-"nnoremap <silent> <A-]> :bn<CR>
-"nnoremap <silent> <A-[> :bp<CR>
 
 " Split
 noremap <Leader>h :<C-u>split<CR>
 noremap <Leader>v :<C-u>vsplit<CR>
 
-" Easier split navigation
-"nnoremap <C-h> <C-w>h
-"nnoremap <C-j> <C-w>j
-"nnoremap <C-k> <C-w>k
-"nnoremap <C-l> <C-w>l
+" Howdoi
+nnoremap <silent> <F10> :call HowDoI()<CR>
 
 " Jump to previous match fith f/t/F/T
 nnoremap <leader>; ,
@@ -213,6 +247,24 @@ nnoremap gp `[v`]
 " Make Y consistent with C and D by yanking up to end of line
 noremap Y y$
 
+" QuickFix navigation
+nnoremap ]q :cnext<CR>
+nnoremap [q :cprevious<CR>
+
+" Location list navigation
+nnoremap ]l :lnext<CR>
+nnoremap [l :lprevious<CR>
+
+" Error mnemonic (Neomake uses location list)
+nnoremap ]e :lnext<CR>
+nnoremap [e :lprevious<CR>
+
+" [S]plit line (sister to [J]oin lines) S is covered by cc.
+nnoremap S mzi<CR><ESC>`z
+
+" Start substitute on current word under the cursor
+nnoremap <leader>s :%s///gc<Left><Left><Left>
+
 " Escape to normal mode in terminal
 tnoremap <Esc> <C-\><C-n>
 
@@ -225,14 +277,20 @@ inoremap <expr><cr> pumvisible() ? "\<C-y>" : "\<cr>"
 nnoremap <tab> >>
 nnoremap <s-tab> <<
 
+" Spell toggle
+imap <F9> <C-\><C-o>:setlocal spell!<CR>
+nmap <F9> :setlocal spell!<CR>
+
 " Indenting in visual mode
 xnoremap <tab> >gv
 xnoremap <s-tab> <gv
 
 " Restoring next list jump with remaping
 nnoremap <A-o> <c-i>
-" Switch between the last two files
-"nnoremap <leader><leader> <c-^>
+
+" Fix spelling error on the go
+imap <c-s> <c-g>u<Esc>[s1z=`]a<c-g>u
+nmap <c-s> [s1z=<c-o>
 
 " scroll slightly faster
 nnoremap <C-e> 2<C-e>
@@ -243,6 +301,16 @@ nnoremap <silent> <leader>o :<C-u>call append(line("."),   repeat([""], v:count1
 nnoremap <silent> <leader>O :<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>
 " nnoremap <leader>O  :<c-u>put! =repeat(nr2char(10), v:count1)<cr>'[+1
 " nnoremap <leader>o :<c-u>put =repeat(nr2char(10), v:count1)<cr>']-1
+
+" Quick save and close buffer
+nnoremap ,w :w<CR>
+nnoremap <silent> <leader>c :Sayonara!<CR>
+nnoremap <silent> <A-k> :Sayonara<CR>
+
+nnoremap <silent> <C-Right> :call IntelligentVerticalResize('right')<CR>
+nnoremap <silent> <C-Left> :call IntelligentVerticalResize('left')<CR>
+nnoremap <silent> <C-Up> :resize +1<CR>
+nnoremap <silent> <C-Down> :resize -1<CR>
 
 " Search visual selected text with * and #
 "function! s:VSetSearch()
@@ -258,38 +326,36 @@ nnoremap <silent> <leader>O :<C-u>call append(line(".")-1, repeat([""], v:count1
 " If you are in a split window, Alt-k closes the window.
 " If there is only one window (no split), Alt-k closes the current buffer
 " and move to the previous one.
-function! CloseWindowOrBuffer()
-    if winnr('$') > 1    " there is more than one window, i.e. there is a split
-        call feedkeys("\<c-w>q")
-    else
-        call feedkeys(":bp |bd #<cr>")
-    endif
-endfunction
+" function! CloseWindowOrBuffer()
+"     if winnr('$') > 1    " there is more than one window, i.e. there is a split
+"         call feedkeys("\<c-w>q")
+"     else
+"         call feedkeys(":bp | bd #\<cr>")
+"     endif
+" endfunction
 
-nnoremap <A-k> :call CloseWindowOrBuffer()<cr>
-inoremap <A-k> <Esc>:call CloseWindowOrBuffer()<cr>
+" nnoremap <A-k> :call CloseWindowOrBuffer()<cr>
+" inoremap <A-k> <Esc>:call CloseWindowOrBuffer()<cr>
 " }
 
 " ================ Auto Commands ================ {
 " vim-python
+" http://vi.stackexchange.com/questions/8772/how-can-i-fix-missing-syntax-highlighting-for-python-keywords-such-as-self/8773#8773
 augroup neo-python
     autocmd!
     autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8
-        \ formatoptions+=croq softtabstop=4
+        \ formatoptions+=croq softtabstop=4 textwidth=79
         \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
-    autocmd FileType python let python_highlight_all=1
-" http://vi.stackexchange.com/questions/8772/how-can-i-fix-missing-syntax-highlighting-for-python-keywords-such-as-self/8773#8773
-    autocmd FileType python
-                \   syn keyword pythonSelf self
-                \ | highlight def pythonSelf cterm=italic,bold gui=italic,bold ctermfg=9 guifg=#cb4b16
+        \ | let python_highlight_all=1
+        \ | syn keyword pythonSelf self
+        \ | highlight def pythonSelf cterm=italic gui=italic ctermfg=9 guifg=#cb4b16
     autocmd FileType python setlocal completeopt-=preview
 augroup END
 
 augroup neo-markdown
     autocmd!
     autocmd FileType markdown setlocal concealcursor=nc conceallevel=2
-    " Enable spellchecking for Markdown
-    autocmd FileType markdown setlocal spell
+        \ | setlocal spell
 augroup END
 
 augroup vimrcEx
@@ -299,9 +365,47 @@ augroup vimrcEx
     " inside an event handler (happens when dropping a file on gvim).
     autocmd BufReadPost *
       \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
-      \   exe "normal g`\"" |
+      \   execute 'normal! g`"zvzz' |
       \ endif
+
+    " Keywordprg settings
+    autocmd FileType vim setlocal keywordprg=:help
 augroup END
+" }
+
+" ================ Functions ================ {
+" Be aware of whether you are right or left vertical split
+" so you can use arrows more naturally.
+" Inspired by https://github.com/ethagnawl.
+function! IntelligentVerticalResize(direction) abort
+  let l:window_resize_count = 5
+  let l:current_window_is_last_window = (winnr() == winnr('$'))
+
+  if (a:direction ==# 'left')
+    let [l:modifier_1, l:modifier_2] = ['+', '-']
+  else
+    let [l:modifier_1, l:modifier_2] = ['-', '+']
+  endif
+
+  let l:modifier = l:current_window_is_last_window ? l:modifier_1 : l:modifier_2
+  let l:command = 'vertical resize ' . l:modifier . l:window_resize_count . '<CR>'
+  execute l:command
+endfunction
+
+" Howdoi integration
+" Needs: `pip install howdoi`
+function! HowDoI() abort
+  let l:command_prefix = 'read '
+  let l:howdoi = '!howdoi '
+
+  call inputsave()
+  let l:query = input('How do I: ')
+  call inputrestore()
+
+  if l:query !=# ''
+    execute l:command_prefix . l:howdoi . l:query
+  endif
+endfunction
 " }
 
 " ================ Plugin: FZF configurations ================ {
@@ -333,7 +437,7 @@ nnoremap <silent> <Leader>ag       :Ag <C-R><C-W><CR>
 nnoremap <silent> <Leader>AG       :Ag <C-R>=expand("<cWORD>")<CR><CR>
 xnoremap <silent> <Leader>ag       y:Ag <C-R>"<CR>
 nnoremap <silent> <Leader>`        :Marks<CR>
-nnoremap <silent> <Leader>/        :Ag <CR>
+"nnoremap <silent> <Leader>/        :Ag <CR>
 
 nnoremap <silent> q: :History:<CR>
 nnoremap <silent> q/ :History/<CR>
@@ -344,6 +448,10 @@ nnoremap <silent> <Leader>p :MRU<CR>
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
 imap <c-x><c-l> <plug>(fzf-complete-line)
+" }
+
+" ================ Plugin: Commentary configurations ================ {
+noremap <leader>/ :Commentary<cr>
 " }
 
 " ================ Plugin: Incsearch configurations ================ {
@@ -372,7 +480,11 @@ map gz# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)
 " }
 
 " ================ Plugin: Neoformat configurations ================ {
-let g:neoformat_enabled_python = ['yapf','autopep8']
+let g:neoformat_python_yapf = {
+        \ 'exe': 'yapf',
+        \ 'args': ['based_on_style=pep8'],
+        \ }
+let g:neoformat_enabled_python = ['autopep8','yapf']
 nnoremap <leader>= :<C-u>Neoformat<cr>
 " }
 
@@ -395,6 +507,10 @@ let g:airline#extensions#tabline#show_close_button = 0
 " let g:airline#extensions#ale#error_symbol = '⨉ '
 " let g:airline#extensions#ale#warning_symbol = '⚠ '
 
+" Show status of Obsession plugin
+" https://github.com/vim-airline/vim-airline/wiki/Configuration-Examples-and-Snippets#integration-with-vim-obsession
+let g:airline_section_z = airline#section#create(['%{ObsessionStatus('''', '''')}', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
+
 let g:airline#extensions#tabline#buffer_idx_mode = 1
 nmap <A-1> <Plug>AirlineSelectTab1
 nmap <A-2> <Plug>AirlineSelectTab2
@@ -410,20 +526,51 @@ nmap <A-]> <Plug>AirlineSelectNextTab
 " }
 
 " ================ Plugin: NERDTree configurations ================ {
-let g:NERDTreeIgnore = ['\.vim$', '\~$', '\.beam', 'elm-stuff']
-let g:NERDTreeShowHidden = 1
-nnoremap <F4> :NERDTreeToggle<CR>
+let g:NERDTreeIgnore = ['\.vim$', '\~$', '.*\.pyc$', '.git', '__pycache__']
+let g:NERDTreeMinimalUI=1
+let g:NERDTreeAutoDeleteBuffer=1
+let g:NERDTreeShowHidden=1
+let g:NERDTreeRespectWildIgnore=1
+nnoremap <F1> :NERDTreeToggle<CR>
 " }
 
 " ================ Plugin: Jedi configurations ================ {
-"let g:jedi#use_splits_not_buffers = "winwidth"
+let g:jedi#use_splits_not_buffers = "winwidth"
+" let g:jedi#popup_on_dot = 0
+let g:jedi#completions_enabled = 0
+let g:jedi#goto_command = "<F3>"
+" }
+
+" ================ Plugin: Deoplete configurations ================ {
+" auto select first match
+set completeopt+=noinsert
+
+call deoplete#custom#set('_', 'converters', ['converter_auto_paren', 'converter_remove_overlap'])
+call deoplete#custom#set('_', 'min_pattern_length', 1)
+call deoplete#custom#set('jedi', 'matchers', ['matcher_fuzzy'])
+call deoplete#custom#set('jedi', 'disabled_syntaxes', ['Comment'])
+
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#auto_complete_delay = 0
+let g:echodoc_enable_at_startup = 1
+let g:deoplete#enable_refresh_always = 0
+let g:deoplete#file#enable_buffer_path=1
+let g:deoplete#max_list = 10000
+
+let g:deoplete#sources = {}
+let g:deoplete#sources.python = ['jedi', 'file']
+
+inoremap <silent><expr><BS> deoplete#smart_close_popup()."\<C-h>"
+inoremap <silent><expr><C-l>    pumvisible() ? deoplete#mappings#refresh() : "\<C-l>"
+inoremap <silent><expr><C-z>    deoplete#mappings#undo_completion()
+inoremap <silent><expr> <C-Space> deoplete#mappings#manual_complete()
 " }
 
 " ================ Plugin: ALE configurations ================ {
 "let g:ale_linters = {
 "\   'python': ['flake8'],
 "\}
-"let g:ale_sign_error = '⨉'
+" let g:ale_sign_error = '⨉'
 "let g:ale_sign_warning = '⚠️'
 "let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
 " }
@@ -431,14 +578,21 @@ nnoremap <F4> :NERDTreeToggle<CR>
 " ================ Plugin: Neomake configurations ================ {
 " Run NeoMake on read and write operations
 autocmd! BufReadPost,BufWritePost * Neomake
+" let g:neomake_warning_sign = {
+"       \ 'text': '⚠️',
+"       \ 'texthl': 'WarningMsg',
+"       \ }
+" let g:neomake_error_sign = {
+"       \ 'text': '⨉',
+"       \ 'texthl': 'ErrorMsg',
+"       \ }
 "let g:neomake_python_enabled_makers = ['pylama']
 " E501 is line length of 80 characters
 "let g:neomake_python_flake8_maker = { 'args': ['--ignore=E115,E266,E501,E302'], }
 " General Neomake configuration
 "let g:neomake_open_list=2
 "let g:neomake_list_height=7
-" Neomake and other build commands (ctrl-b)
-nnoremap <F5> :w<cr>:Neomake<cr>
+" nnoremap <F5> :w<cr>:Neomake<cr>
 " }
 
 " ================ Plugin: Tagbar configurations ================ {
