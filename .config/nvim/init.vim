@@ -178,6 +178,10 @@ let maplocalleader="\\"
 " }
 
 " ================ Custom mappings ================ {
+" Remap ctrl-c for this issue:
+" https://github.com/Shougo/deoplete.nvim/issues/460
+inoremap <C-c> <Esc>
+
 " Clear search by Tim Pope https://github.com/tpope/vim-sensible/blob/master/plugin/sensible.vim
 "nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 nnoremap <silent> <A-l> :nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
