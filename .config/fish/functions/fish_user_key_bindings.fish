@@ -1,3 +1,5 @@
+
+fzf_key_bindings
 function fish_user_key_bindings
     ### Locate+FZF ###
     bind \cs '__fzf_locate'
@@ -35,5 +37,3 @@ function fish_user_key_bindings
     end
     ### fzf ###
 end
-
-fzf_key_bindings

@@ -420,7 +420,7 @@ let $FZF_DEFAULT_OPTS .= ' --inline-info'
 "command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 
 command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview('right:50%', '?'), <bang>0)
 
 command! -bang -nargs=* MRU
   \ call fzf#vim#history(fzf#vim#with_preview('right:50%:hidden', '?'), <bang>0)
