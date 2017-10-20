@@ -34,6 +34,10 @@ set -x FZF_CD_WITH_HIDDEN_OPTS '--history=/home/efforia/.cache/FZF_cd_history'
 set -x FZF_LOCATE_OPTS "--preview 'rougify {} 2>/dev/null' --header-lines=1 --preview-window hidden --bind '?:toggle-preview' --history='/home/efforia/.cache/FZF_history'"
 # }
 
+# ================ virtualfish ================ {
+eval (python -m virtualfish auto_activation global_requirements)
+# }
+
 # ================ Functions ================ {
 function mkd --description 'mkdir -p and cd into'
     mkdir -p $argv
@@ -54,5 +58,9 @@ function gcreate --argument-names name description --description 'Create new Rep
     else
         echo Please provide name and description of the branch!
     end
+end
+
+function glog --description 'Git log with fzf node'
+    git log --oneline | fzf --multi --preview 'git show {+1}'
 end
 # }

@@ -29,6 +29,7 @@ Plug 'mhinz/vim-sayonara'
 " Plug 'chaoren/vim-wordmotion'
 
 " Code support
+" Plug 'KeitaNakamura/highlighter.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'sbdchd/neoformat'
