@@ -143,6 +143,9 @@ if &shell =~# 'fish$'
   set shell=/bin/bash
 endif
 
+let g:python_host_prog = '/bin/python2'
+let g:python3_host_prog = '/bin/python'
+
 " Disable tmux navigator when zooming the Vim pane. [vim-tmux-navigator]
 let g:tmux_navigator_disable_when_zoomed = 1
 " }

@@ -61,6 +61,6 @@ function gcreate --argument-names name description --description 'Create new Rep
 end
 
 function glog --description 'Git log with fzf node'
-    git log --oneline | fzf --multi --preview 'git show {+1}'
+    git log --oneline | fzf --multi --reverse --no-sort --ansi --border --bind 'alt-n:preview-down' --bind 'alt-p:preview-up' --preview 'git show --color=always {+1}'
 end
 # }
