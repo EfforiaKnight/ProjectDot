@@ -585,7 +585,10 @@ inoremap <silent><expr> <C-Space> deoplete#mappings#manual_complete()
 
 " ================ Plugin: Neomake configurations ================ {
 " Run NeoMake on read and write operations
-autocmd! BufReadPost,BufWritePost * Neomake
+" autocmd! BufReadPost,BufWritePost * Neomake
+
+" When writing a buffer, and on normal mode changes (after 750ms).
+call neomake#configure#automake('nw', 750)
 " let g:neomake_warning_sign = {
 "       \ 'text': '⚠️',
 "       \ 'texthl': 'WarningMsg',
