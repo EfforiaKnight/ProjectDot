@@ -29,7 +29,7 @@ Plug 'mhinz/vim-sayonara'
 " Plug 'chaoren/vim-wordmotion'
 
 " Code support
-" Plug 'KeitaNakamura/highlighter.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'KeitaNakamura/highlighter.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'sbdchd/neoformat'
@@ -553,10 +553,10 @@ let g:jedi#goto_command = "<F3>"
 " auto select first match
 set completeopt+=noinsert
 
-call deoplete#custom#set('_', 'converters', ['converter_auto_paren', 'converter_remove_overlap'])
-call deoplete#custom#set('_', 'min_pattern_length', 1)
-call deoplete#custom#set('jedi', 'matchers', ['matcher_fuzzy'])
-call deoplete#custom#set('jedi', 'disabled_syntaxes', ['Comment'])
+call deoplete#custom#source('_', 'converters', ['converter_auto_paren', 'converter_remove_overlap'])
+call deoplete#custom#source('_', 'min_pattern_length', 1)
+call deoplete#custom#source('jedi', 'matchers', ['matcher_fuzzy'])
+call deoplete#custom#source('jedi', 'disabled_syntaxes', ['Comment'])
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_complete_delay = 0
@@ -567,6 +567,8 @@ let g:deoplete#max_list = 10000
 
 let g:deoplete#sources = {}
 let g:deoplete#sources.python = ['jedi', 'file']
+
+let g:deoplete#sources#jedi#server_timeout = 120
 
 inoremap <silent><expr><BS> deoplete#smart_close_popup()."\<C-h>"
 inoremap <silent><expr><C-l>    pumvisible() ? deoplete#mappings#refresh() : "\<C-l>"
@@ -609,6 +611,10 @@ call neomake#configure#automake('nw', 750)
 " ================ Plugin: Tagbar configurations ================ {
 nmap <F8> :TagbarToggle<CR>
 inoremap <F8> <esc>:TagbarToggle<CR>
+" }
+
+" ================ Plugin: Highlighter configurations ================ {
+let g:highlighter#auto_update = 1 " 0: disable (default), 1: after saving the file, 2: after saving and opening the file
 " }
 
 " ================ Backups ================ {
