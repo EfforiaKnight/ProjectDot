@@ -158,7 +158,7 @@ set smartcase              "
 set wrapscan               " Searches wrap around end-of-file.
 set synmaxcol   =200       " Only highlight the first 200 columns.
 if has('nvim')
-    set inccommand=nosplit " Multiple substitute in window
+    set inccommand=split " Multiple substitute in window
 endif
 
 let g:incsearch#highlight = {
@@ -185,6 +185,11 @@ let maplocalleader="\\"
 " Remap ctrl-c for this issue:
 " https://github.com/Shougo/deoplete.nvim/issues/460
 inoremap <C-c> <Esc>
+
+" Recover from accidental Ctrl-U
+" http://vim.wikia.com/wiki/Recover_from_accidental_Ctrl-U
+inoremap <c-u> <c-g>u<c-u>
+inoremap <c-w> <c-g>u<c-w>
 
 " Clear search by Tim Pope https://github.com/tpope/vim-sensible/blob/master/plugin/sensible.vim
 "nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
@@ -266,6 +271,9 @@ nnoremap [l :lprevious<CR>
 " Error mnemonic (Neomake uses location list)
 nnoremap ]e :lnext<CR>
 nnoremap [e :lprevious<CR>
+
+nnoremap ]b :bnext<CR>
+nnoremap [b :bprevious<CR>
 
 " [S]plit line (sister to [J]oin lines) S is covered by cc.
 nnoremap S mzi<CR><ESC>`z
