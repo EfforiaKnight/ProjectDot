@@ -5,3 +5,5 @@
 	user = EfforiaKnight
 [color]
 	ui = auto
+[alias]
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(auto)%d% %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --
