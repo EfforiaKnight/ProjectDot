@@ -31,7 +31,7 @@ Plug 'mhinz/vim-sayonara'
 " Code support
 Plug 'KeitaNakamura/highlighter.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Yggdroot/indentLine'
-Plug 'sheerun/vim-polyglot'
+" Plug 'sheerun/vim-polyglot'
 Plug 'sbdchd/neoformat'
 "Plug 'w0rp/ale'
 Plug 'neomake/neomake'
@@ -427,7 +427,7 @@ endfunction
 " ================ Plugin: FZF configurations ================ {
 " set fzf's default input to AG instead of find. This also removes gitignore etc
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
-let $FZF_DEFAULT_OPTS .= ' --inline-info'
+let $FZF_DEFAULT_OPTS .= ' --inline-info --border'
 "let &grepprg = 'ag --nogroup --nocolor --column'
 "command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 
@@ -502,11 +502,13 @@ let g:neoformat_python_yapf = {
         \ }
 let g:neoformat_enabled_python = ['autopep8','yapf']
 nnoremap <leader>= :<C-u>Neoformat<cr>
+vnoremap <leader>= :Neoformat<cr>
 " }
 
 " ================ Plugin: IndentLine configurations ================ {
 " IndentLine
-let g:indentLine_char = '┆'
+let g:indentLine_char = '┊'
+let g:indentLine_setColors = 0
 "let g:indentLine_faster = 1
 let g:indentLine_fileTypeExclude = ['markdown']
 " }
@@ -526,6 +528,8 @@ let g:airline#extensions#tabline#show_close_button = 0
 " Show status of Obsession plugin
 " https://github.com/vim-airline/vim-airline/wiki/Configuration-Examples-and-Snippets#integration-with-vim-obsession
 let g:airline_section_z = airline#section#create(['%{ObsessionStatus('''', '''')}', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
+
+let g:airline_solarized_bg='dark'
 
 let g:airline#extensions#tabline#buffer_idx_mode = 1
 nmap <A-1> <Plug>AirlineSelectTab1
@@ -611,8 +615,8 @@ call neomake#configure#automake('nw', 750)
 " E501 is line length of 80 characters
 "let g:neomake_python_flake8_maker = { 'args': ['--ignore=E115,E266,E501,E302'], }
 " General Neomake configuration
-"let g:neomake_open_list=2
-"let g:neomake_list_height=7
+" let g:neomake_open_list=2
+" let g:neomake_list_height=7
 " nnoremap <F5> :w<cr>:Neomake<cr>
 " }
 
