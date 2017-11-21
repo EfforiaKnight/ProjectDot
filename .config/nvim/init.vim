@@ -24,6 +24,8 @@ Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeFind', 'NERDTreeToggle'] }
 Plug 'tpope/vim-obsession'
 Plug 'junegunn/vim-peekaboo'
 Plug 'mhinz/vim-sayonara'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-repeat'
 
 " http://vim.wikia.com/wiki/Moving_through_camel_case_words
 " Plug 'chaoren/vim-wordmotion'
@@ -626,7 +628,11 @@ inoremap <F8> <esc>:TagbarToggle<CR>
 " }
 
 " ================ Plugin: Highlighter configurations ================ {
-let g:highlighter#auto_update = 1 " 0: disable (default), 1: after saving the file, 2: after saving and opening the file
+let g:highlighter#auto_update = 2 " 0: disable (default), 1: after saving the file, 2: after saving and opening the file
+" }
+
+" ================ Plugin: Highlighter configurations ================ {
+let g:gitgutter_grep_command = 'ag'
 " }
 
 " ================ Backups ================ {
