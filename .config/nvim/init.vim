@@ -631,7 +631,7 @@ inoremap <F8> <esc>:TagbarToggle<CR>
 let g:highlighter#auto_update = 2 " 0: disable (default), 1: after saving the file, 2: after saving and opening the file
 " }
 
-" ================ Plugin: Highlighter configurations ================ {
+" ================ Plugin: Gitgutter configurations ================ {
 let g:gitgutter_grep_command = 'ag'
 " }
 
