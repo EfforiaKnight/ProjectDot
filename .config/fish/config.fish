@@ -16,7 +16,7 @@ set -x TERM xterm-256color-italic
 # }
 
 # ================ FZF ================ {
-set -x FZF_DEFAULT_COMMAND 'ag --hidden --ignore .git -g ""'
+set -x FZF_DEFAULT_COMMAND 'ag -l --hidden --ignore .git'
 set -x FZF_DEFAULT_OPTS '--inline-info'
 
 set -x FZF_TMUX 1

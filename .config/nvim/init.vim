@@ -20,6 +20,7 @@ Plug 'joshdick/onedark.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'haya14busa/incsearch.vim'
 Plug 'haya14busa/vim-asterisk'
+" Plug 'justinmk/vim-sneak'
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeFind', 'NERDTreeToggle'] }
 Plug 'tpope/vim-obsession'
 Plug 'junegunn/vim-peekaboo'
@@ -237,7 +238,7 @@ nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>rv :source $MYVIMRC<CR>:redraw<CR>:noh<CR>:echo $MYVIMRC 'Reloaded'<CR>
 
 " Change to current working directory
-nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+nnoremap <leader>cd :lcd %:p:h<CR>:pwd<CR>
 
 " Open/close folds
 nnoremap <space> za
@@ -246,11 +247,8 @@ nnoremap <space> za
 noremap <Leader>h :<C-u>split<CR>
 noremap <Leader>v :<C-u>vsplit<CR>
 
-" Howdoi
-nnoremap <silent> <F10> :call HowDoI()<CR>
-
 " Jump to previous match fith f/t/F/T
-nnoremap <leader>; ,
+nnoremap \ ,
 
 " Move selected lines up and down
 vnoremap J :m '>+1<CR>gv=gv
@@ -409,21 +407,6 @@ function! IntelligentVerticalResize(direction) abort
   let l:command = 'vertical resize ' . l:modifier . l:window_resize_count . '<CR>'
   execute l:command
 endfunction
-
-" Howdoi integration
-" Needs: `pip install howdoi`
-function! HowDoI() abort
-  let l:command_prefix = 'read '
-  let l:howdoi = '!howdoi '
-
-  call inputsave()
-  let l:query = input('How do I: ')
-  call inputrestore()
-
-  if l:query !=# ''
-    execute l:command_prefix . l:howdoi . l:query
-  endif
-endfunction
 " }
 
 " ================ Plugin: FZF configurations ================ {
@@ -448,6 +431,7 @@ command! -bang -nargs=* Ag
   \                 <bang>0)
 
 " nnoremap <silent> <Leader><Leader> :Files<CR>
+" prevent fzf to open files inside NERD_tree buffer
 nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 nnoremap <silent> <Leader><Enter>  :Buffers<CR>
 
@@ -459,7 +443,7 @@ nnoremap <silent> <Leader>`        :Marks<CR>
 
 nnoremap <silent> q: :History:<CR>
 nnoremap <silent> q/ :History/<CR>
-nnoremap <silent> <leader>; :Lines<CR>
+nnoremap <silent> <leader>l :BLines<CR>
 nnoremap <silent> <Leader>? :Helptags<CR>
 nnoremap <silent> <Leader>p :MRU<CR>
 
@@ -633,6 +617,8 @@ let g:highlighter#auto_update = 2 " 0: disable (default), 1: after saving the fi
 
 " ================ Plugin: Gitgutter configurations ================ {
 let g:gitgutter_grep_command = 'ag'
+nnoremap <silent> <leader>gg :GitGutterToggle<cr>
+nnoremap <silent> <leader>gl :GitGutterLineHighlightsToggle<cr>
 " }
 
 " ================ Backups ================ {
