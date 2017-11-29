@@ -84,6 +84,7 @@ set scrolloff=7            " Set 7 lines to the cursor - when moving vertically 
 "set relativenumber         " Set relative number column
 set number                 " Display line numbers
 set ruler                  " Always show current position
+set signcolumn=yes         " Always show signcolumn
 
 " Only have cursorline in current window and in normal window
 autocmd WinLeave * set nocursorline
@@ -161,7 +162,7 @@ set smartcase              "
 set wrapscan               " Searches wrap around end-of-file.
 set synmaxcol   =200       " Only highlight the first 200 columns.
 if has('nvim')
-    set inccommand=split " Multiple substitute in window
+    set inccommand=nosplit " Multiple substitute in window
 endif
 
 let g:incsearch#highlight = {
@@ -511,9 +512,10 @@ let g:airline#extensions#tabline#show_close_button = 0
 " let g:airline#extensions#ale#error_symbol = '⨉ '
 " let g:airline#extensions#ale#warning_symbol = '⚠ '
 
-" Show status of Obsession plugin
-" https://github.com/vim-airline/vim-airline/wiki/Configuration-Examples-and-Snippets#integration-with-vim-obsession
-let g:airline_section_z = airline#section#create(['%{ObsessionStatus('''', '''')}', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
+" enable/disable vim-obsession integration
+let g:airline#extensions#obsession#enabled = 1
+" set marked window indicator string
+let g:airline#extensions#obsession#indicator_text = ''
 
 let g:airline_solarized_bg='dark'
 
