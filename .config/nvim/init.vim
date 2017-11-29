@@ -84,7 +84,7 @@ set scrolloff=7            " Set 7 lines to the cursor - when moving vertically 
 "set relativenumber         " Set relative number column
 set number                 " Display line numbers
 set ruler                  " Always show current position
-set signcolumn=yes         " Always show signcolumn
+" set signcolumn=yes
 
 " Only have cursorline in current window and in normal window
 autocmd WinLeave * set nocursorline
