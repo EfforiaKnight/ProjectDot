@@ -27,13 +27,20 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'mhinz/vim-sayonara'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-repeat'
+Plug 'mbbill/undotree'
+
+" Usage
+" [count]["x]gr{motion} 
+" [count]["x]grr
+" {Visual}["x]gr
+Plug 'vim-scripts/ReplaceWithRegister'
 
 " http://vim.wikia.com/wiki/Moving_through_camel_case_words
 " Plug 'chaoren/vim-wordmotion'
 
 " Code support
 Plug 'KeitaNakamura/highlighter.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'Yggdroot/indentLine'
+Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
 " Plug 'sheerun/vim-polyglot'
 Plug 'sbdchd/neoformat'
 "Plug 'w0rp/ale'
@@ -63,7 +70,9 @@ syntax enable              " Enable syntax highlighting.
 set termguicolors
 set background=dark
 "let g:onedark_terminal_italics=1
-colorscheme solarized8_dark
+colorscheme solarized8
+let g:solarized_term_italics = 1
+let g:solarized_enable_extra_hi_groups = 1
 " }
 
 "  ================ Encoding ================ {
@@ -115,6 +124,9 @@ set listchars=tab:▸\ ,extends:❯,precedes:❮,eol:¬,trail:·
 set fillchars=diff:⣿,vert:│ " Change fillchars
 set diffopt=vertical        " Use in vertical diff mode
 
+" set textwidth   =79 " Set width of the wrap
+" set colorcolumn =79 " Set color column
+
 augroup trailing " Only show trailing whitespace when not in insert mode
     autocmd!
     autocmd InsertEnter * :set listchars-=trail:·
@@ -141,6 +153,9 @@ set nojoinspaces           " J command doesn't add extra space
 set mouse=a                " Enable mouse
 set guicursor=n-v-c-sm:block,i-ci-ve:ver25-iCursor-blinkwait300-blinkon200-blinkoff150,r-cr-o:hor20
 
+" Keep the cursor on the same column
+set nostartofline
+
 " The fish shell is not very compatible to other shells and unexpectedly
 " breaks things that use 'shell'.
 if &shell =~# 'fish$'
@@ -165,9 +180,27 @@ if has('nvim')
     set inccommand=nosplit " Multiple substitute in window
 endif
 
+hi CurrentWordUL cterm=underline gui=underline
+hi Search cterm=underline gui=underline
+augroup MyHighlighter
+  autocmd!
+  " autocmd User IncSearchEnter call ToggleMatch()
+  " autocmd User IncSearchLeave call ToggleMatch()
+  set updatetime=500
+  autocmd CursorHold * if get(g:, 'matchhl', 1) | silent! exe printf('match CurrentWordUL /\<%s\>/', expand('<cword>')) | endif
+  autocmd CursorMoved * if get(g:, 'matchhl', 1) | silent! exe printf('match none') | endif
+augroup END
+
+nnoremap <silent> <f4> :call ToggleMatch()<cr>
+
+function! ToggleMatch() abort
+    match none | diffupdate | syntax sync fromstart
+    let g:matchhl = !get(g:, 'matchhl', 1)
+endfunction
+
 let g:incsearch#highlight = {
 \   'match' : {
-    \     'group' : 'IncSearchUnderline',
+\     'group' : 'IncSearchUnderline',
 \     'priority' : '10'
 \   },
 \   'on_cursor' : {
@@ -186,27 +219,37 @@ let maplocalleader="\\"
 " }
 
 " ================ Custom mappings ================ {
+" ----------------------------------------------------------------------------
 " Remap ctrl-c for this issue:
 " https://github.com/Shougo/deoplete.nvim/issues/460
+" ----------------------------------------------------------------------------
 inoremap <C-c> <Esc>
 
+" ----------------------------------------------------------------------------
 " Recover from accidental Ctrl-U
 " http://vim.wikia.com/wiki/Recover_from_accidental_Ctrl-U
+" ----------------------------------------------------------------------------
 inoremap <c-u> <c-g>u<c-u>
 inoremap <c-w> <c-g>u<c-w>
 
+" ----------------------------------------------------------------------------
 " Clear search by Tim Pope https://github.com/tpope/vim-sensible/blob/master/plugin/sensible.vim
+" ----------------------------------------------------------------------------
 "nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 nnoremap <silent> <A-l> :nohlsearch<cr>:diffupdate<cr>:syntax sync fromstart<cr><c-l>
 
+" ----------------------------------------------------------------------------
 " When jump to next match also center screen
 " Note: Use :norm! to make it count as one command. (i.e. for i_CTRL-o)
+" ----------------------------------------------------------------------------
 nnoremap <silent> n :norm! nzz<CR>
 nnoremap <silent> N :norm! Nzz<CR>
 vnoremap <silent> n :norm! nzz<CR>
 vnoremap <silent> N :norm! Nzz<CR>
 
+" ----------------------------------------------------------------------------
 " Same when moving up and down
+" ----------------------------------------------------------------------------
 nnoremap <C-u> <C-u>zz
 nnoremap <C-d> <C-d>zz
 nnoremap <C-f> <C-f>zz
@@ -216,19 +259,25 @@ vnoremap <C-d> <C-d>zz
 vnoremap <C-f> <C-f>zz
 vnoremap <C-b> <C-b>zz
 
+" ----------------------------------------------------------------------------
 " Remap H and L (top, bottom of screen to left and right end of line)
+" ----------------------------------------------------------------------------
 nnoremap H ^
 nnoremap L $
 vnoremap H ^
 vnoremap L g_
 
+" ----------------------------------------------------------------------------
 " Visual linewise up and down by default (and use gj gk to go quicker)
+" ----------------------------------------------------------------------------
 nnoremap j gj
 nnoremap k gk
 vnoremap j gj
 vnoremap k gk
 
+" ----------------------------------------------------------------------------
 " Don't yank to default register when changing something
+" ----------------------------------------------------------------------------
 nnoremap c "xc
 xnoremap c "xc
 
@@ -238,96 +287,197 @@ nnoremap <silent> p p`]
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>rv :source $MYVIMRC<CR>:redraw<CR>:noh<CR>:echo $MYVIMRC 'Reloaded'<CR>
 
+" ----------------------------------------------------------------------------
+" Split
+" ----------------------------------------------------------------------------
+noremap <Leader><bar> :<C-u>vsplit<CR>
+noremap <Leader>- :<C-u>split<CR>
+
+" ----------------------------------------------------------------------------
 " Change to current working directory
+" ----------------------------------------------------------------------------
 nnoremap <leader>cd :lcd %:p:h<CR>:pwd<CR>
 
+" ----------------------------------------------------------------------------
 " Open/close folds
+" ----------------------------------------------------------------------------
 nnoremap <space> za
 
-" Split
-noremap <Leader>h :<C-u>split<CR>
-noremap <Leader>v :<C-u>vsplit<CR>
-
-" Jump to previous match fith f/t/F/T
+" ----------------------------------------------------------------------------
+" Jump to previous match with f/t/F/T
+" ----------------------------------------------------------------------------
 nnoremap \ ,
 
+" ----------------------------------------------------------------------------
 " Move selected lines up and down
+" ----------------------------------------------------------------------------
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
+" ----------------------------------------------------------------------------
 " Select last pasted text
+" ----------------------------------------------------------------------------
 nnoremap gp `[v`]
 
+" ----------------------------------------------------------------------------
 " Make Y consistent with C and D by yanking up to end of line
+" ----------------------------------------------------------------------------
 noremap Y y$
 
-" QuickFix navigation
-nnoremap ]q :cnext<CR>
-nnoremap [q :cprevious<CR>
+" ----------------------------------------------------------------------------
+" <Leader>c Close quickfix/location window
+" ----------------------------------------------------------------------------
+" nnoremap <leader>c :cclose<bar>lclose<cr>
+nnoremap  <leader>L :call ToggleLocationfix()<cr>
 
-" Location list navigation
-nnoremap ]l :lnext<CR>
-nnoremap [l :lprevious<CR>
+let g:location_is_open = 0
 
-" Error mnemonic (Neomake uses location list)
-nnoremap ]e :lnext<CR>
-nnoremap [e :lprevious<CR>
+function! ToggleLocationfix() abort
+  let l:nr =  winnr("$")
+  if l:nr == 1
+      silent! lopen
+  else
+      silent! lclose
+  endif
+endfunction
 
-nnoremap ]b :bnext<CR>
-nnoremap [b :bprevious<CR>
+" ----------------------------------------------------------------------------
+" Quickfix / Location
+" ----------------------------------------------------------------------------
+nnoremap ]q :cnext<cr>zz
+nnoremap [q :cprev<cr>zz
+nnoremap ]l :lnext<cr>zz
+nnoremap [l :lprev<cr>zz
 
-" [S]plit line (sister to [J]oin lines) S is covered by cc.
-nnoremap S mzi<CR><ESC>`z
+" ----------------------------------------------------------------------------
+" Buffers
+" ----------------------------------------------------------------------------
+nnoremap ]b :bnext<cr>
+nnoremap [b :bprev<cr>
 
+" ----------------------------------------------------------------------------
+" Tabs
+" ----------------------------------------------------------------------------
+nnoremap ]t :tabn<cr>
+nnoremap [t :tabp<cr>
+
+" ----------------------------------------------------------------------------
+" Markdown headings
+" ----------------------------------------------------------------------------
+nnoremap <leader>1 m`yypVr=``
+nnoremap <leader>2 m`yypVr-``
+nnoremap <leader>3 m`^i### <esc>``4l
+nnoremap <leader>4 m`^i#### <esc>``5l
+nnoremap <leader>5 m`^i##### <esc>``6l
+
+
+" ----------------------------------------------------------------------------
 " Start substitute on current word under the cursor
-nnoremap <leader>s :%s///gc<Left><Left><Left>
+" ----------------------------------------------------------------------------
+nnoremap <leader>s :%s/<C-r><C-w>//gc<Left><Left><Left>
+vnoremap <leader>s "xy:%s/<C-r>x//gc<left><left><left>
 
+" ----------------------------------------------------------------------------
 " Escape to normal mode in terminal
+" ----------------------------------------------------------------------------
 tnoremap <Esc> <C-\><C-n>
 
+" ----------------------------------------------------------------------------
 " Use Tab and S-Tab to select candidate
+" ----------------------------------------------------------------------------
 inoremap <expr><Tab>  pumvisible() ? "\<C-N>" : "\<Tab>"
 inoremap <expr><S-Tab> pumvisible() ? "\<C-P>" : "\<S-Tab>"
 inoremap <expr><cr> pumvisible() ? "\<C-y>" : "\<cr>"
 
+" ----------------------------------------------------------------------------
 " Maps for indentation in normal mode
+" ----------------------------------------------------------------------------
 nnoremap <tab> >>
 nnoremap <s-tab> <<
 
-" Spell toggle
-imap <F9> <C-\><C-o>:setlocal spell!<CR>
-nmap <F9> :setlocal spell!<CR>
-
+" ----------------------------------------------------------------------------
 " Indenting in visual mode
+" ----------------------------------------------------------------------------
 xnoremap <tab> >gv
 xnoremap <s-tab> <gv
 
-" Restoring next list jump with remaping
+" ----------------------------------------------------------------------------
+" Spell toggle
+" ----------------------------------------------------------------------------
+imap <F9> <C-\><C-o>:setlocal spell!<CR>
+nmap <F9> :setlocal spell!<CR>
+
+" ----------------------------------------------------------------------------
+" Restoring next list jump with remapping
+" ----------------------------------------------------------------------------
 nnoremap <A-o> <c-i>
 
+" ----------------------------------------------------------------------------
 " Fix spelling error on the go
-imap <c-s> <c-g>u<Esc>[s1z=`]a<c-g>u
-nmap <c-s> [s1z=<c-o>
+" ----------------------------------------------------------------------------
+inoremap <c-q> <c-g>u<Esc>[s1z=`]a<c-g>u
+nnoremap <c-q> [s1z=<c-o>
 
+" ----------------------------------------------------------------------------
 " scroll slightly faster
+" ----------------------------------------------------------------------------
 nnoremap <C-e> 2<C-e>
 nnoremap <C-y> 2<C-y>
 
+" ----------------------------------------------------------------------------
+" qq to record, Q to replay
+" ----------------------------------------------------------------------------
+nnoremap Q @q
+
+" ----------------------------------------------------------------------------
 " Insert empty line above or below
+" ----------------------------------------------------------------------------
 nnoremap <silent> <leader>o :<C-u>call append(line("."),   repeat([""], v:count1))<CR>
 nnoremap <silent> <leader>O :<C-u>call append(line(".")-1, repeat([""], v:count1))<CR>
 " nnoremap <leader>O  :<c-u>put! =repeat(nr2char(10), v:count1)<cr>'[+1
 " nnoremap <leader>o :<c-u>put =repeat(nr2char(10), v:count1)<cr>']-1
 
+" ----------------------------------------------------------------------------
 " Quick save and close buffer
-nnoremap ,w :w<CR>
+" ----------------------------------------------------------------------------
+inoremap <C-s>              :update<CR>
+nnoremap <C-s>              :update<CR>
+nnoremap <leader>w          :update<CR>
 nnoremap <silent> <leader>c :Sayonara!<CR>
-nnoremap <silent> <A-k> :Sayonara<CR>
+nnoremap <silent> <A-k>     :Sayonara<CR>
 
 nnoremap <silent> <C-Right> :call IntelligentVerticalResize('right')<CR>
-nnoremap <silent> <C-Left> :call IntelligentVerticalResize('left')<CR>
-nnoremap <silent> <C-Up> :resize +1<CR>
-nnoremap <silent> <C-Down> :resize -1<CR>
+nnoremap <silent> <C-Left>  :call IntelligentVerticalResize('left')<CR>
+nnoremap <silent> <C-Up>    :resize +1<CR>
+nnoremap <silent> <C-Down>  :resize -1<CR>
+
+" ----------------------------------------------------------------------------
+" Readline-style key bindings in command-line
+" ----------------------------------------------------------------------------
+cnoremap        <C-A> <Home>
+cnoremap        <C-B> <Left>
+cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
+cnoremap <expr> <C-F> getcmdpos()>strlen(getcmdline())?&cedit:"\<Lt>Right>"
+cnoremap        <M-b> <S-Left>
+cnoremap        <M-f> <S-Right>
+silent! exe "set <S-Left>=\<Esc>b"
+silent! exe "set <S-Right>=\<Esc>f"
+
+" ----------------------------------------------------------------------------
+" <Leader>?/! | Google it / Feeling lucky
+" ----------------------------------------------------------------------------
+function! s:goog(pat, lucky)
+  let q = '"'.substitute(a:pat, '["\n]', ' ', 'g').'"'
+  let q = substitute(q, '[[:punct:] ]',
+       \ '\=printf("%%%02X", char2nr(submatch(0)))', 'g')
+  call system(printf('xdg-open "https://www.google.com/search?%sq=%s"',
+                   \ a:lucky ? 'btnI&' : '', q))
+endfunction
+
+nnoremap <leader>? :call <SID>goog(expand("<cWORD>"), 0)<cr>
+nnoremap <leader>! :call <SID>goog(expand("<cWORD>"), 1)<cr>
+xnoremap <leader>? "gy:call <SID>goog(@g, 0)<cr>gv
+xnoremap <leader>! "gy:call <SID>goog(@g, 1)<cr>gv
 
 " Search visual selected text with * and #
 "function! s:VSetSearch()
@@ -355,7 +505,7 @@ nnoremap <silent> <C-Down> :resize -1<CR>
 " inoremap <A-k> <Esc>:call CloseWindowOrBuffer()<cr>
 " }
 
-" ================ Auto Commands ================ {
+" ================ Auto Group Commands ================ {
 " vim-python
 " http://vi.stackexchange.com/questions/8772/how-can-i-fix-missing-syntax-highlighting-for-python-keywords-such-as-self/8773#8773
 augroup neo-python
@@ -371,7 +521,7 @@ augroup END
 
 augroup neo-markdown
     autocmd!
-    autocmd FileType markdown setlocal concealcursor=nc conceallevel=2
+    autocmd FileType markdown,*commit* setlocal concealcursor=nc conceallevel=2
         \ | setlocal spell
 augroup END
 
@@ -445,7 +595,7 @@ nnoremap <silent> <Leader>`        :Marks<CR>
 nnoremap <silent> q: :History:<CR>
 nnoremap <silent> q/ :History/<CR>
 nnoremap <silent> <leader>l :BLines<CR>
-nnoremap <silent> <Leader>? :Helptags<CR>
+nnoremap <silent> <Leader>h :Helptags<CR>
 nnoremap <silent> <Leader>p :MRU<CR>
 
 imap <c-x><c-f> <plug>(fzf-complete-path)
@@ -463,23 +613,24 @@ map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 
 let g:incsearch#auto_nohlsearch = 1
-map n  <Plug>(incsearch-nohl-n)
-map N  <Plug>(incsearch-nohl-N)
+map n  <Plug>(incsearch-nohl-n)zz
+map N  <Plug>(incsearch-nohl-N)zz
 
 " Keep cursor position across matches
 let g:asterisk#keeppos = 1
 
 " Emacs like keymaps
 let g:incsearch#emacs_like_keymap=1
-map *   <Plug>(incsearch-nohl)<Plug>(asterisk-*)
-map g*  <Plug>(incsearch-nohl)<Plug>(asterisk-g*)
-map #   <Plug>(incsearch-nohl)<Plug>(asterisk-#)
-map g#  <Plug>(incsearch-nohl)<Plug>(asterisk-g#)
 
-map z*  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
-map gz* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
-map z#  <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)
-map gz# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)
+map *   <Plug>(incsearch-nohl)<Plug>(asterisk-*)zz
+map g*  <Plug>(incsearch-nohl)<Plug>(asterisk-g*)zz " Whole word
+map #   <Plug>(incsearch-nohl)<Plug>(asterisk-#)zz
+map g#  <Plug>(incsearch-nohl)<Plug>(asterisk-g#)zz " Whole word
+
+map z*  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)zz  " Stay
+map gz* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)zz " Stay and whole word
+map z#  <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)zz  " Stay
+map gz# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)zz " Stay and whole word
 " }
 
 " ================ Plugin: Neoformat configurations ================ {
@@ -497,7 +648,7 @@ vnoremap <leader>= :Neoformat<cr>
 let g:indentLine_char = '┊'
 let g:indentLine_setColors = 0
 "let g:indentLine_faster = 1
-let g:indentLine_fileTypeExclude = ['markdown']
+let g:indentLine_fileTypeExclude = ['markdown','help']
 " }
 
 " ================ Plugin: Airline configurations ================ {
@@ -583,6 +734,9 @@ inoremap <silent><expr> <C-Space> deoplete#mappings#manual_complete()
 " let g:ale_sign_error = '⨉'
 "let g:ale_sign_warning = '⚠️'
 "let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+" let g:ale_lint_delay = 1000
+" nmap ]a <Plug>(ale_next_wrap)
+" nmap [a <Plug>(ale_previous_wrap)
 " }
 
 " ================ Plugin: Neomake configurations ================ {
@@ -621,6 +775,11 @@ let g:highlighter#auto_update = 2 " 0: disable (default), 1: after saving the fi
 let g:gitgutter_grep_command = 'ag'
 nnoremap <silent> <leader>gg :GitGutterToggle<cr>
 nnoremap <silent> <leader>gl :GitGutterLineHighlightsToggle<cr>
+" }
+
+" ================ Plugin: Undotree configurations ================ {
+nnoremap U :UndotreeToggle<CR>
+let g:undotree_WindowLayout = 2
 " }
 
 " ================ Backups ================ {
