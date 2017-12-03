@@ -30,7 +30,7 @@ Plug 'tpope/vim-repeat'
 Plug 'mbbill/undotree'
 
 " Usage
-" [count]["x]gr{motion} 
+" [count]["x]gr{motion}
 " [count]["x]grr
 " {Visual}["x]gr
 Plug 'vim-scripts/ReplaceWithRegister'
@@ -290,8 +290,8 @@ nnoremap <leader>rv :source $MYVIMRC<CR>:redraw<CR>:noh<CR>:echo $MYVIMRC 'Reloa
 " ----------------------------------------------------------------------------
 " Split
 " ----------------------------------------------------------------------------
-noremap <Leader><bar> :<C-u>vsplit<CR>
-noremap <Leader>- :<C-u>split<CR>
+noremap <C-w><bar> :<C-u>vsplit<CR>
+noremap <C-w>- :<C-u>split<CR>
 
 " ----------------------------------------------------------------------------
 " Change to current working directory
