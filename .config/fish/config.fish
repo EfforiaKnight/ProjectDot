@@ -63,4 +63,12 @@ end
 function glog --description 'Git log with fzf node'
     git log --oneline | fzf --multi --reverse --no-sort --ansi --border --bind 'alt-n:preview-down' --bind 'alt-p:preview-up' --preview 'git show --color=always {+1}'
 end
+
+function gcd --description 'Go to a path relative to the top directory of the current git worktree'
+    set -l topdir (git rev-parse --show-toplevel 2> /dev/null)
+    if test $status -ne 0
+        return 1
+    end
+    cd "$topdir/$argv"
+end
 # }
