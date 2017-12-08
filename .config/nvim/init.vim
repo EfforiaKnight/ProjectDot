@@ -372,6 +372,11 @@ nnoremap <leader>5 m`^i##### <esc>``6l
 
 
 " ----------------------------------------------------------------------------
+" [S]plit line (sister to [J]oin lines) S is covered by cc.
+" ----------------------------------------------------------------------------
+nnoremap S mzi<CR><ESC>`z
+
+" ----------------------------------------------------------------------------
 " Start substitute on current word under the cursor
 " ----------------------------------------------------------------------------
 nnoremap <leader>s :%s/<C-r><C-w>//gc<Left><Left><Left>
@@ -395,9 +400,6 @@ inoremap <expr><cr> pumvisible() ? "\<C-y>" : "\<cr>"
 nnoremap <tab> >>
 nnoremap <s-tab> <<
 
-" ----------------------------------------------------------------------------
-" Indenting in visual mode
-" ----------------------------------------------------------------------------
 xnoremap <tab> >gv
 xnoremap <s-tab> <gv
 
