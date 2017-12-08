@@ -15,6 +15,10 @@ set -x TERM xterm-256color
 #set -x TERM screen-256color
 # }
 
+# ================ Alias================ {
+alias rm='echo "Use trash instead of rm."; false'
+# }
+
 # ================ FZF ================ {
 set -x FZF_DEFAULT_COMMAND 'ag -l --hidden --ignore .git'
 set -x FZF_DEFAULT_OPTS '--inline-info'
