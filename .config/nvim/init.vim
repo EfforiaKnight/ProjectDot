@@ -594,7 +594,7 @@ if executable('rg')
 endif
 
 if executable('ag')
-    let s:ag_options = ' --one-device --color-match="31" --color-line-number="35" --color-path="32" --nogroup --follow --silent --hidden --ignore .git'
+    let s:ag_options = ' --one-device --color-match="31" --color-line-number="32" --color-path="35" --nogroup --follow --silent --hidden --ignore .git'
     command! -bang -nargs=* Ag
                 \ call fzf#vim#ag(<q-args>,
                 \                  s:ag_options,

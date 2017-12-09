@@ -21,7 +21,7 @@ alias rm='echo "Use trash instead of rm."; false'
 
 # ================ FZF ================ {
 set -x FZF_DEFAULT_COMMAND 'rg --files --smart-case --no-ignore --hidden --follow --no-messages --glob "!.git/*"'
-set -x FZF_DEFAULT_OPTS "--inline-info --bind 'ctrl-alt-j:down,ctrl-alt-k:up'"
+set -x FZF_DEFAULT_OPTS "--inline-info --reverse --bind 'ctrl-alt-j:down,ctrl-alt-k:up'"
 
 set -x FZF_TMUX 1
 set -x FZF_LEGACY_KEYBINDINGS 0
