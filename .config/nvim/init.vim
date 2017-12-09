@@ -442,7 +442,7 @@ nnoremap <silent> <leader>O :<C-u>call append(line(".")-1, repeat([""], v:count1
 " ----------------------------------------------------------------------------
 " Quick save and close buffer
 " ----------------------------------------------------------------------------
-inoremap <C-s>              :update<CR>
+inoremap <C-s>              <ESC>:update<CR>
 nnoremap <C-s>              :update<CR>
 nnoremap <leader>w          :update<CR>
 nnoremap <silent> <leader>c :Sayonara!<CR>
@@ -565,37 +565,61 @@ endfunction
 " ================ Plugin: FZF configurations ================ {
 " set fzf's default input to AG instead of find. This also removes gitignore etc
 let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
-let $FZF_DEFAULT_OPTS .= ' --inline-info --border'
-"let &grepprg = 'ag --nogroup --nocolor --column'
-"command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+let $FZF_DEFAULT_OPTS .= ' --inline-info'
 
 command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview('right:50%', '?'), <bang>0)
+  \ call fzf#vim#files(<q-args>,
+  \                 <bang>0 ? fzf#vim#with_preview('down:60%')
+  \                         : fzf#vim#with_preview('right:60%:hidden', '?'),
+  \                 <bang>0)
 
 command! -bang -nargs=* MRU
-  \ call fzf#vim#history(fzf#vim#with_preview('right:50%:hidden', '?'), <bang>0)
+  \ call fzf#vim#history(fzf#vim#with_preview('right:60%:hidden', '?'), <bang>0)
 
-let s:ag_options = ' --one-device --hidden --ignore .git'
-command! -bang -nargs=* Ag
-  \ call fzf#vim#ag(<q-args>,
-  \                  s:ag_options,
-  \                 <bang>0 ? fzf#vim#with_preview('down:60%')
-  \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \                 <bang>0)
+if executable('rg')
+    let s:rg_options = 'rg --no-messages --line-number --smart-case --hidden --follow --no-heading --color=always --glob "!.git/*" '
+    command! -bang -nargs=* Rg
+                \ call fzf#vim#grep(
+                \   s:rg_options . shellescape(<q-args>), 1,
+                \   <bang>0 ? fzf#vim#with_preview('up:60%')
+                \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+                \   <bang>0)
+
+    nnoremap <silent> <Leader>rg       :Rg <C-R><C-W><CR>
+    nnoremap <silent> <Leader>RG       :Rg <C-R>=expand("<cWORD>")<CR><CR>
+    xnoremap <silent> <Leader>rg       y:Rg <C-R>"<CR>
+
+    let grepprg = s:rg_options
+    command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+endif
+
+if executable('ag')
+    let s:ag_options = ' --one-device --color-match="31" --color-line-number="35" --color-path="32" --nogroup --follow --silent --hidden --ignore .git'
+    command! -bang -nargs=* Ag
+                \ call fzf#vim#ag(<q-args>,
+                \                  s:ag_options,
+                \                 <bang>0 ? fzf#vim#with_preview('down:60%')
+                \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+                \                 <bang>0)
+
+    nnoremap <silent> <Leader>ag       :Ag <C-R><C-W><CR>
+    nnoremap <silent> <Leader>AG       :Ag <C-R>=expand("<cWORD>")<CR><CR>
+    xnoremap <silent> <Leader>ag       y:Ag <C-R>"<CR>
+    "nnoremap <silent> <Leader>/        :Ag <CR>
+    let grepprg = 'ag --one-device --follow --ignore .git'
+    command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+endif
 
 " nnoremap <silent> <Leader><Leader> :Files<CR>
 " prevent fzf to open files inside NERD_tree buffer
 nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 nnoremap <silent> <Leader><Enter>  :Buffers<CR>
 
-nnoremap <silent> <Leader>ag       :Ag <C-R><C-W><CR>
-nnoremap <silent> <Leader>AG       :Ag <C-R>=expand("<cWORD>")<CR><CR>
-xnoremap <silent> <Leader>ag       y:Ag <C-R>"<CR>
-nnoremap <silent> <Leader>`        :Marks<CR>
-"nnoremap <silent> <Leader>/        :Ag <CR>
 
-nnoremap <silent> q: :History:<CR>
-nnoremap <silent> q/ :History/<CR>
+
+nnoremap <silent> <Leader>` :Marks<CR>
+nnoremap <silent> q:        :History:<CR>
+nnoremap <silent> q/        :History/<CR>
 nnoremap <silent> <leader>l :BLines<CR>
 nnoremap <silent> <Leader>h :Helptags<CR>
 nnoremap <silent> <Leader>p :MRU<CR>
@@ -687,7 +711,7 @@ nmap <A-]> <Plug>AirlineSelectNextTab
 " }
 
 " ================ Plugin: NERDTree configurations ================ {
-let g:NERDTreeIgnore = ['\.vim$', '\~$', '.*\.pyc$', '.git', '__pycache__']
+let g:NERDTreeIgnore = ['\~$', '.*\.pyc$', '.git', '__pycache__']
 let g:NERDTreeMinimalUI=1
 let g:NERDTreeAutoDeleteBuffer=1
 let g:NERDTreeShowHidden=1

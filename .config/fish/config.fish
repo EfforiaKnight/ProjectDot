@@ -20,14 +20,14 @@ alias rm='echo "Use trash instead of rm."; false'
 # }
 
 # ================ FZF ================ {
-set -x FZF_DEFAULT_COMMAND 'ag -l --hidden --ignore .git'
-set -x FZF_DEFAULT_OPTS '--inline-info'
+set -x FZF_DEFAULT_COMMAND 'rg --files --smart-case --no-ignore --hidden --follow --no-messages --glob "!.git/*"'
+set -x FZF_DEFAULT_OPTS "--inline-info --bind 'ctrl-alt-j:down,ctrl-alt-k:up'"
 
 set -x FZF_TMUX 1
 set -x FZF_LEGACY_KEYBINDINGS 0
 
-set -x FZF_FIND_FILE_COMMAND 'ag -l --hidden --ignore .git'
-set -x FZF_FIND_FILE_OPTS '--history=/home/efforia/.cache/FZF_history'
+set -x FZF_FIND_FILE_COMMAND 'rg --files --smart-case --no-ignore --hidden --follow --no-messages --glob "!.git/*"'
+set -x FZF_FIND_FILE_OPTS "--preview 'rougify {} 2>/dev/null' --preview-window right:60%:hidden --bind 'alt-n:preview-down,alt-p:preview-up,?:toggle-preview' --history='/home/efforia/.cache/FZF_history'"
 
 set -x FZF_REVERSE_ISEARCH_OPTS '--history=/home/efforia/.cache/FZF_reverse_history'
 set -x FZF_FIND_AND_EXECUTE_OPTS '--history=/home/efforia/.cache/FZF_reverse_history'
@@ -35,9 +35,9 @@ set -x FZF_FIND_AND_EXECUTE_OPTS '--history=/home/efforia/.cache/FZF_reverse_his
 set -x FZF_CD_OPTS '--history=/home/efforia/.cache/FZF_cd_history'
 set -x FZF_CD_WITH_HIDDEN_OPTS '--history=/home/efforia/.cache/FZF_cd_history'
 
-set -x FZF_LOCATE_OPTS "--preview 'rougify {} 2>/dev/null' --header-lines=1 --preview-window hidden --bind '?:toggle-preview' --history='/home/efforia/.cache/FZF_history'"
+set -x FZF_LOCATE_OPTS "--preview 'rougify {} 2>/dev/null' --preview-window right:60%:hidden --bind 'alt-n:preview-down,alt-p:preview-up,?:toggle-preview' --history='/home/efforia/.cache/FZF_history'"
 
-function _gen_fzf_default_opts --description "Solarized theme for fzf"
+function gen_fzf_default_opts --description "Solarized theme for fzf"
     set -l color00 '#002b36'
     set -l color01 '#073642'
     set -l color02 '#586e75'
@@ -63,7 +63,8 @@ function _gen_fzf_default_opts --description "Solarized theme for fzf"
     "
 end
 
-_gen_fzf_default_opts
+# Set default fzf opts
+gen_fzf_default_opts
 # }
 
 # ================ virtualfish ================ {
@@ -93,7 +94,7 @@ function gcreate --argument-names name description --description 'Create new Rep
 end
 
 function glog --description 'Git log with fzf node'
-    git log --oneline | fzf --multi --reverse --no-sort --ansi --border --bind 'alt-n:preview-down' --bind 'alt-p:preview-up' --preview 'git show --color=always {+1}'
+    git log --oneline | fzf --multi --reverse --no-sort --preview-window right:70%:hidden --bind 'alt-n:preview-down,alt-p:preview-up,?:toggle-preview' --preview 'git show --color=always {+1}'
 end
 
 function gcd --description 'Go to a path relative to the top directory of the current git worktree'

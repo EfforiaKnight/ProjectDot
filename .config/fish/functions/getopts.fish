@@ -1,1 +1,0 @@
-/home/efforia/.config/fisherman/getopts/getopts.fish
