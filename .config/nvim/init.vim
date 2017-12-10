@@ -564,7 +564,7 @@ endfunction
 
 " ================ Plugin: FZF configurations ================ {
 " set fzf's default input to AG instead of find. This also removes gitignore etc
-let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
+let $FZF_DEFAULT_COMMAND = 'rg --files --smart-case --no-ignore --hidden --follow --no-messages --glob "!.git/*"'
 let $FZF_DEFAULT_OPTS .= ' --inline-info'
 
 command! -bang -nargs=? -complete=dir Files
@@ -606,7 +606,7 @@ if executable('ag')
     nnoremap <silent> <Leader>AG       :Ag <C-R>=expand("<cWORD>")<CR><CR>
     xnoremap <silent> <Leader>ag       y:Ag <C-R>"<CR>
     "nnoremap <silent> <Leader>/        :Ag <CR>
-    let grepprg = 'ag --one-device --follow --ignore .git'
+    let grepprg = 'ag' . s:ag_options
     command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 endif
 
