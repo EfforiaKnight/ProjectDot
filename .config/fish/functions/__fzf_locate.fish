@@ -4,7 +4,7 @@ function __fzf_locate --description 'Search using locate command with fzf'
   set -q FZF_LOCATE_COMMAND
   or set -l FZF_LOCATE_COMMAND "command locate /"
   begin
-    set -lx FZF_DEFAULT_OPTS "$FZF_FIND_FILE_OPTS $FZF_LOCATE_OPTS"
+    set -lx FZF_DEFAULT_OPTS "$FZF_DEFAULT_OPTS $FZF_LOCATE_OPTS"
     eval "$FZF_LOCATE_COMMAND | "(__fzfcmd) -m  --query "'$fzf_query'" | while read -l s; set selects $selects $s; end
   end
   if [ -z "$selects" ]

@@ -94,7 +94,7 @@ function gcreate --argument-names name description --description 'Create new Rep
 end
 
 function glog --description 'Git log with fzf node'
-    git log --oneline | fzf --multi --reverse --no-sort --preview-window right:70%:hidden --bind 'alt-n:preview-down,alt-p:preview-up,?:toggle-preview' --preview 'git show --color=always {+1}'
+    git log --color --pretty=format:'%Cred%h%Creset -%C(auto)%d% %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit | fzf --ansi --multi --reverse --no-sort --preview-window right:70%:hidden --bind 'alt-n:preview-down,alt-p:preview-up,?:toggle-preview' --preview 'git show --color=always {+1}'
 end
 
 function gcd --description 'Go to a path relative to the top directory of the current git worktree'

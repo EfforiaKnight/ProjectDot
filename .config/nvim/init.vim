@@ -41,7 +41,10 @@ Plug 'vim-scripts/ReplaceWithRegister'
 " Code support
 Plug 'KeitaNakamura/highlighter.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
-" Plug 'sheerun/vim-polyglot'
+
+" Syntax for almsot all types
+Plug 'sheerun/vim-polyglot'
+
 Plug 'sbdchd/neoformat'
 "Plug 'w0rp/ale'
 Plug 'neomake/neomake'
@@ -329,15 +332,23 @@ noremap Y y$
 " ----------------------------------------------------------------------------
 " nnoremap <leader>c :cclose<bar>lclose<cr>
 nnoremap  <leader>L :call ToggleLocationfix()<cr>
-
-let g:location_is_open = 0
+nnoremap  <leader>C :call ToggleQuickfix()<cr>
 
 function! ToggleLocationfix() abort
-  let l:nr =  winnr("$")
-  if l:nr == 1
+  let l:lnr =  winnr("$")
+  if l:lnr == 1
       silent! lopen
   else
       silent! lclose
+  endif
+endfunction
+
+function! ToggleQuickfix() abort
+  let l:cnr =  winnr("$")
+  if l:cnr == 1
+      silent! copen
+  else
+      silent! cclose
   endif
 endfunction
 
@@ -588,9 +599,6 @@ if executable('rg')
     nnoremap <silent> <Leader>rg       :Rg <C-R><C-W><CR>
     nnoremap <silent> <Leader>RG       :Rg <C-R>=expand("<cWORD>")<CR><CR>
     xnoremap <silent> <Leader>rg       y:Rg <C-R>"<CR>
-
-    let grepprg = s:rg_options
-    command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 endif
 
 if executable('ag')
@@ -606,7 +614,7 @@ if executable('ag')
     nnoremap <silent> <Leader>AG       :Ag <C-R>=expand("<cWORD>")<CR><CR>
     xnoremap <silent> <Leader>ag       y:Ag <C-R>"<CR>
     "nnoremap <silent> <Leader>/        :Ag <CR>
-    let grepprg = 'ag' . s:ag_options
+    set grepprg=ag\ --nogroup\ --nocolor
     command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 endif
 
@@ -806,6 +814,10 @@ nnoremap <silent> <leader>gl :GitGutterLineHighlightsToggle<cr>
 " ================ Plugin: Undotree configurations ================ {
 nnoremap U :UndotreeToggle<CR>
 let g:undotree_WindowLayout = 2
+" }
+
+" ================ Plugin: Polyglot configurations ================ {
+let g:polyglot_disabled = ['python'] " Neovim python syntax is better
 " }
 
 " ================ Backups ================ {
