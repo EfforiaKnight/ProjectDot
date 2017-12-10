@@ -27,7 +27,7 @@ set -x FZF_TMUX 1
 set -x FZF_LEGACY_KEYBINDINGS 0
 
 set -x FZF_FIND_FILE_COMMAND 'rg --files --smart-case --no-ignore --hidden --follow --no-messages --glob "!.git/*"'
-set -x FZF_FIND_FILE_OPTS "--preview 'rougify {} 2>/dev/null' --preview-window right:60%:hidden --bind 'alt-n:preview-down,alt-p:preview-up,?:toggle-preview' --history='/home/efforia/.cache/FZF_history'"
+set -x FZF_FIND_FILE_OPTS "--preview 'rougify {} 2>/dev/null' --preview-window right:60%:hidden --bind 'ctrl-o:execute(open {}),alt-n:preview-down,alt-p:preview-up,?:toggle-preview' --history='/home/efforia/.cache/FZF_history'"
 
 set -x FZF_REVERSE_ISEARCH_OPTS '--history=/home/efforia/.cache/FZF_reverse_history'
 set -x FZF_FIND_AND_EXECUTE_OPTS '--history=/home/efforia/.cache/FZF_reverse_history'
@@ -35,7 +35,7 @@ set -x FZF_FIND_AND_EXECUTE_OPTS '--history=/home/efforia/.cache/FZF_reverse_his
 set -x FZF_CD_OPTS '--history=/home/efforia/.cache/FZF_cd_history'
 set -x FZF_CD_WITH_HIDDEN_OPTS '--history=/home/efforia/.cache/FZF_cd_history'
 
-set -x FZF_LOCATE_OPTS "--preview 'rougify {} 2>/dev/null' --preview-window right:60%:hidden --bind 'alt-n:preview-down,alt-p:preview-up,?:toggle-preview' --history='/home/efforia/.cache/FZF_history'"
+set -x FZF_LOCATE_OPTS "--preview 'rougify {} 2>/dev/null' --preview-window right:60%:hidden --bind 'ctrl-o:execute(open {}),alt-n:preview-down,alt-p:preview-up,?:toggle-preview' --history='/home/efforia/.cache/FZF_history'"
 
 function gen_fzf_default_opts --description "Solarized theme for fzf"
     set -l color00 '#002b36'
