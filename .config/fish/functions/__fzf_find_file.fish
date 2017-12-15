@@ -1,6 +1,5 @@
 function __fzf_find_file
-    set -l commandline (__fzf_parse_commandline)
-    set -l fzf_query $commandline[2]
+  set -l fzf_query (__fzf_commandline_parse)
   set -q FZF_FIND_FILE_COMMAND
   or set -l FZF_FIND_FILE_COMMAND "command find -L \$PWD -mindepth 1 \\( -path \$PWD'*/\\.*' -o -fstype 'sysfs' -o -fstype 'devfs' -o -fstype 'devtmpfs' \\) -prune \
     -o -type f -print \

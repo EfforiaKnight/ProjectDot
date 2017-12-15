@@ -9,7 +9,7 @@ function __fzf_cd
     eval "$FZF_CD_COMMAND | "(__fzfcmd) -m  --query '(commandline)' | read -l select
     if [ -n "$select" ]
       cd "$select"
-      commandline -t ""
+      commandline ""
     end
   end
   commandline -f repaint

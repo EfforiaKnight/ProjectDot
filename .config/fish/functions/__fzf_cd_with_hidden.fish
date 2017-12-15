@@ -10,7 +10,7 @@ function __fzf_cd_with_hidden
     eval "$FZF_CD_WITH_HIDDEN_COMMAND | "(__fzfcmd) -m --query '(commandline)' | read -l select
     if [ -n "$select" ]
       cd "$select"
-      commandline -t ""
+      commandline ""
     end
   end
   commandline -f repaint

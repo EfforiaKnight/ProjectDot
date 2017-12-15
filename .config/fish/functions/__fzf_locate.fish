@@ -1,6 +1,5 @@
 function __fzf_locate --description 'Search using locate command with fzf'
-  set -l commandline (__fzf_parse_commandline)
-  set -l fzf_query $commandline[2]
+  set -l fzf_query (__fzf_commandline_parse)
   set -q FZF_LOCATE_COMMAND
   or set -l FZF_LOCATE_COMMAND "command locate /"
   begin
