@@ -1,9 +1,9 @@
-"  ================ EfforiaKnight ================
-"  ================ Modeline and Notes ================ {
+" ================ EfforiaKnight ================
+" ================ Modeline and Notes ================ {
 " vim: foldmarker={,} foldmethod=marker foldlevel=0:
 " }
 
-"  ================ Vim-Plug auto install ================ {
+" ================ Vim-Plug auto install ================ {
 if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
   silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -11,7 +11,7 @@ if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
 endif
 " }
 
-"  ================ Plugins ================ {
+" ================ Plugins ================ {
 call plug#begin('~/.local/share/nvim/plugged')
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
 Plug 'lifepillar/vim-solarized8'
@@ -68,7 +68,7 @@ Plug 'ryanoasis/vim-devicons'
 call plug#end()
 " }
 
-"  ================ Colors ================ {
+" ================ Colors ================ {
 syntax enable              " Enable syntax highlighting.
 set termguicolors
 set background=dark
@@ -78,7 +78,7 @@ let g:solarized_term_italics = 1
 let g:solarized_enable_extra_hi_groups = 1
 " }
 
-"  ================ Encoding ================ {
+" ================ Encoding ================ {
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
@@ -89,11 +89,36 @@ set fileencodings=utf-8
 set foldnestmax=1         " max 10 depth
 "set foldenable             " Auto fold code
 set foldlevelstart=1        " start with fold level of 1
+
+" Improved Vim fold-text
+" See: http://www.gregsexton.org/2011/03/improving-the-text-displayed-in-a-fold/
+function! FoldText()
+    " Get first non-blank line
+    let fs = v:foldstart
+    while getline(fs) =~? '^\s*$' | let fs = nextnonblank(fs + 1)
+    endwhile
+    if fs > v:foldend
+        let line = getline(v:foldstart)
+    else
+        let line = substitute(getline(fs), '\t', repeat(' ', &tabstop), 'g')
+    endif
+
+    let w = winwidth(0) - &foldcolumn - (&number ? 8 : 0)
+    let foldSize = 1 + v:foldend - v:foldstart
+    " let foldSizeStr = '| ' . printf("%10s", foldSize . ' lines') . " | "
+    let foldSizeStr = " " . foldSize . " lines "
+    let foldLevelStr = repeat('↯', v:foldlevel)
+    let lineCount = line('$')
+    " let foldPercentage = printf('[%.1f', (foldSize*1.0)/lineCount*100) . '%] '
+    let foldPercentage = ''
+    let expansionString = repeat('·', w - strwidth(foldSizeStr.line.foldLevelStr.foldPercentage))
+    return line . expansionString . foldSizeStr . foldPercentage . foldLevelStr
+endfunction
+set foldtext=FoldText()
 " }
 
-"  ================ UI layout ================ {
+" ================ UI layout ================ {
 set scrolloff=7            " Set 7 lines to the cursor - when moving vertically using j/k
-"set relativenumber         " Set relative number column
 set number                 " Display line numbers
 set ruler                  " Always show current position
 " set signcolumn=yes
@@ -119,7 +144,7 @@ set splitbelow             " Open new windows below the current window.
 set splitright             " Open new windows right of the current window.
 " }
 
-"  ================ UI Special chars ================ {
+" ================ UI Special chars ================ {
 set list                    " Show non-printable characters.
 set showbreak=↪\
 set linebreak
@@ -137,7 +162,7 @@ augroup trailing " Only show trailing whitespace when not in insert mode
 augroup END
 " }
 
-"  ================ Spaces & Tabs ================ {
+" ================ Spaces & Tabs ================ {
 set autoindent             " Indent according to previous line.
 set expandtab              " Use spaces instead of tabs.
 set softtabstop =4         " Tab key indents by 4 spaces.
@@ -146,7 +171,7 @@ set shiftround             " >> indents to next multiple of 'shiftwidth'.
 filetype plugin indent on  " Load plugins according to detected filetype.
 " }
 
-"  ================ Misc  ================ {
+" ================ Misc  ================ {
 set hidden                 " Enable hidden buffers
 set clipboard^=unnamedplus " Make default clipboard, system clipboard
 set backspace =indent,eol,start  " Make backspace work as you would expect.
@@ -161,9 +186,9 @@ set nostartofline
 
 " The fish shell is not very compatible to other shells and unexpectedly
 " breaks things that use 'shell'.
-if &shell =~# 'fish$'
-  set shell=/bin/bash
-endif
+" if &shell =~# 'fish$'
+"   set shell=/bin/bash
+" endif
 
 let g:python_host_prog = '/bin/python2'
 let g:python3_host_prog = '/bin/python'
@@ -263,6 +288,11 @@ vnoremap <C-f> <C-f>zz
 vnoremap <C-b> <C-b>zz
 
 " ----------------------------------------------------------------------------
+" Refocus folds; close any other fold except the one that you are on
+" ----------------------------------------------------------------------------
+nnoremap ,z zMzvzz
+
+" ----------------------------------------------------------------------------
 " Remap H and L (top, bottom of screen to left and right end of line)
 " ----------------------------------------------------------------------------
 nnoremap H ^
@@ -310,6 +340,11 @@ nnoremap <space> za
 " Jump to previous match with f/t/F/T
 " ----------------------------------------------------------------------------
 nnoremap \ ,
+
+" ----------------------------------------------------------------------------
+" Toggle relative number column
+" ----------------------------------------------------------------------------
+noremap <leader>rn :set relativenumber!<CR>
 
 " ----------------------------------------------------------------------------
 " Move selected lines up and down
@@ -538,6 +573,12 @@ augroup neo-markdown
         \ | setlocal spell
 augroup END
 
+augroup neo-terminal
+    autocmd!
+    " Automatically enter insert mode when entering neovim terminal buffer
+    autocmd BufWinEnter,WinEnter term://* startinsert
+augroup END
+
 augroup vimrcEx
     autocmd!
     " When editing a file, always jump to the last known cursor position.
@@ -576,7 +617,7 @@ endfunction
 " ================ Plugin: FZF configurations ================ {
 " set fzf's default input to AG instead of find. This also removes gitignore etc
 let $FZF_DEFAULT_COMMAND = 'rg --files --smart-case --no-ignore --hidden --follow --no-messages --glob "!.git/*"'
-let $FZF_DEFAULT_OPTS .= ' --inline-info'
+let $FZF_DEFAULT_OPTS .= ' --inline-info -m --bind ctrl-a:select-all,ctrl-d:deselect-all,alt-t:toggle-all'
 
 command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>,
@@ -812,7 +853,7 @@ nnoremap <silent> <leader>gl :GitGutterLineHighlightsToggle<cr>
 " }
 
 " ================ Plugin: Undotree configurations ================ {
-nnoremap U :UndotreeToggle<CR>
+nnoremap <F7> :UndotreeToggle<CR>
 let g:undotree_WindowLayout = 2
 " }
 
