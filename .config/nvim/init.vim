@@ -334,7 +334,8 @@ nnoremap <leader>cd :lcd %:p:h<CR>:pwd<CR>
 " ----------------------------------------------------------------------------
 " Open/close folds
 " ----------------------------------------------------------------------------
-nnoremap <space> za
+nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+vnoremap <Space> zf
 
 " ----------------------------------------------------------------------------
 " Jump to previous match with f/t/F/T
