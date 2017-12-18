@@ -495,10 +495,10 @@ nnoremap <leader>w          :update<CR>
 nnoremap <silent> <leader>c :Sayonara!<CR>
 nnoremap <silent> <A-k>     :Sayonara<CR>
 
-nnoremap <silent> <C-Right> :call IntelligentVerticalResize('right')<CR>
-nnoremap <silent> <C-Left>  :call IntelligentVerticalResize('left')<CR>
-nnoremap <silent> <C-Up>    :resize +1<CR>
-nnoremap <silent> <C-Down>  :resize -1<CR>
+nnoremap <silent> <A-Right> :call IntelligentVerticalResize('right')<CR>
+nnoremap <silent> <A-Left>  :call IntelligentVerticalResize('left')<CR>
+nnoremap <silent> <A-Up>    :resize +1<CR>
+nnoremap <silent> <A-Down>  :resize -1<CR>
 
 " ----------------------------------------------------------------------------
 " Readline-style key bindings in command-line
@@ -760,7 +760,7 @@ nmap <A-]> <Plug>AirlineSelectNextTab
 " }
 
 " ================ Plugin: NERDTree configurations ================ {
-let g:NERDTreeIgnore = ['\~$', '.*\.pyc$', '.git', '__pycache__']
+let g:NERDTreeIgnore = ['\~$', '.*\.pyc$', '.git$[[dir]]', '.swp', '__pycache__']
 let g:NERDTreeMinimalUI=1
 let g:NERDTreeAutoDeleteBuffer=1
 let g:NERDTreeShowHidden=1
