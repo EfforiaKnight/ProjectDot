@@ -765,7 +765,41 @@ let g:NERDTreeMinimalUI=1
 let g:NERDTreeAutoDeleteBuffer=1
 let g:NERDTreeShowHidden=1
 let g:NERDTreeRespectWildIgnore=1
-nnoremap <F1> :NERDTreeToggle<CR>
+let g:NERDTreeDirArrowExpandable="▸"
+let g:NERDTreeDirArrowCollapsible="▾"
+nnoremap <F1> :call NERDTreeToggleFind()<CR>
+
+let g:WebDevIconsUnicodeDecorateFolderNodes = 1
+let g:DevIconsEnableFoldersOpenClose = 1
+let g:webdevicons_conceal_nerdtree_brackets = 1
+let g:WebDevIconsNerdTreeAfterGlyphPadding = ' '
+
+if exists("g:NERDTree.IsOpen")
+    echom "test"
+endif
+
+function! NERDTreeToggleFind()
+    " Focus on NERDTree if it's open and not Focused
+    " Close NERDTree and jump back to original window
+    " Execute NERDTreeFind if NERDTree not open
+    if exists("*g:NERDTree.IsOpen") && g:NERDTree.IsOpen() && !exists("b:NERDTree")
+        NERDTreeFocus
+        let g:matchhl = 1 " Enable highlight matching word
+        wincmd p
+    elseif exists("b:NERDTree")
+        wincmd q
+        wincmd p
+    else
+        let g:matchhl = 0 " Disable highlight matching word
+        NERDTreeFind
+    endif
+endfunction
+
+augroup NeoNERDTree
+    autocmd!
+    " Close vim if the only window left open is a NERDTree
+    autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+augroup END
 " }
 
 " ================ Plugin: Jedi configurations ================ {
