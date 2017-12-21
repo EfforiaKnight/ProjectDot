@@ -210,20 +210,23 @@ endif
 
 hi CurrentWordUL cterm=underline gui=underline
 hi Search cterm=underline ctermfg=124 gui=underline guifg=#af0000
+
 augroup MyHighlighter
   autocmd!
-  " autocmd User IncSearchEnter call ToggleMatch()
-  " autocmd User IncSearchLeave call ToggleMatch()
+  " autocmd User IncSearchEnter MatchHighlighter 0
+  " autocmd User IncSearchExecute MatchHighlighter 1
+
   set updatetime=500
-  autocmd CursorHold * if get(g:, 'matchhl', 1) | silent! exe printf('match CurrentWordUL /\<%s\>/', expand('<cword>')) | endif
-  autocmd CursorMoved * if get(g:, 'matchhl', 1) | silent! exe printf('match none') | endif
+  autocmd CursorHold * if (get(g:, 'matchhl', 1) && &ft!='nerdtree') | silent! exe printf('match CurrentWordUL /\<%s\>/', expand('<cword>')) | endif
+  autocmd CursorMoved * if (get(g:, 'matchhl', 1) && &ft!='nerdtree') | silent! exe printf('match none') | endif
 augroup END
 
-nnoremap <silent> <f4> :call ToggleMatch()<cr>
+nnoremap <silent> <f4> :MatchHighlighter<CR>
+command! -nargs=? MatchHighlighter call ToggleSetMatchHL(empty(<q-args>) ? !g:matchhl : expand(<q-args>))
 
-function! ToggleMatch() abort
+function! ToggleSetMatchHL(arg) abort
     match none | diffupdate | syntax sync fromstart
-    let g:matchhl = !get(g:, 'matchhl', 1)
+    let g:matchhl = a:arg
 endfunction
 
 let g:incsearch#highlight = {
@@ -568,6 +571,12 @@ augroup neo-python
     autocmd FileType python setlocal completeopt-=preview
 augroup END
 
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
+
 augroup neo-markdown
     autocmd!
     autocmd FileType markdown,*commit* setlocal concealcursor=nc conceallevel=2
@@ -577,6 +586,7 @@ augroup END
 augroup terminal
     autocmd TermOpen * set bufhidden=hide
     autocmd TermOpen * setlocal nospell
+    autocmd TermOpen * startinsert
 augroup END
 
 augroup vimrcEx
@@ -687,15 +697,28 @@ map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 
-let g:incsearch#auto_nohlsearch = 1
 map n  <Plug>(incsearch-nohl-n)zz
 map N  <Plug>(incsearch-nohl-N)zz
+
+let g:incsearch#auto_nohlsearch = 1
 
 " Keep cursor position across matches
 let g:asterisk#keeppos = 1
 
 " Emacs like keymaps
 let g:incsearch#emacs_like_keymap=1
+
+augroup incsearch-keymap
+    autocmd!
+    autocmd VimEnter * call s:incsearch_keymap()
+augroup END
+
+function! s:incsearch_keymap()
+    IncSearchNoreMap <Tab> <Over>(buffer-complete)
+    IncSearchNoreMap <S-Tab> <Over>(buffer-complete-prev)
+    IncSearchNoreMap <C-j> <Over>(incsearch-next)
+    IncSearchNoreMap <C-k>  <Over>(incsearch-prev)
+endfunction
 
 map *   <Plug>(incsearch-nohl)<Plug>(asterisk-*)zz
 map g*  <Plug>(incsearch-nohl)<Plug>(asterisk-g*)zz " Whole word
@@ -774,23 +797,16 @@ let g:DevIconsEnableFoldersOpenClose = 1
 let g:webdevicons_conceal_nerdtree_brackets = 1
 let g:WebDevIconsNerdTreeAfterGlyphPadding = ' '
 
-if exists("g:NERDTree.IsOpen")
-    echom "test"
-endif
-
 function! NERDTreeToggleFind()
     " Focus on NERDTree if it's open and not Focused
     " Close NERDTree and jump back to original window
     " Execute NERDTreeFind if NERDTree not open
-    if exists("*g:NERDTree.IsOpen") && g:NERDTree.IsOpen() && !exists("b:NERDTree")
+    if exists("g:NERDTree.IsOpen") && g:NERDTree.IsOpen() && !exists("b:NERDTree")
         NERDTreeFocus
-        let g:matchhl = 1 " Enable highlight matching word
-        wincmd p
     elseif exists("b:NERDTree")
         wincmd q
         wincmd p
     else
-        let g:matchhl = 0 " Disable highlight matching word
         NERDTreeFind
     endif
 endfunction
