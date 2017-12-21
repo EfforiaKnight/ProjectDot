@@ -209,7 +209,7 @@ if has('nvim')
 endif
 
 hi CurrentWordUL cterm=underline gui=underline
-hi Search cterm=underline gui=underline
+hi Search cterm=underline ctermfg=124 gui=underline guifg=#af0000
 augroup MyHighlighter
   autocmd!
   " autocmd User IncSearchEnter call ToggleMatch()

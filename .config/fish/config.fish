@@ -13,6 +13,9 @@ set -g theme_display_date no
 set -x EDITOR nvim
 set -x TERM xterm-256color
 #set -x TERM screen-256color
+
+# Set better LS_Colors
+eval (dircolors -c '~/.dircolors/dircolors.256dark')
 # }
 
 # ================ Alias================ {
