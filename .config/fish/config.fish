@@ -15,7 +15,7 @@ set -x TERM xterm-256color
 #set -x TERM screen-256color
 
 # Set better LS_Colors
-eval (dircolors -c '~/.dircolors/dircolors.256dark')
+set -gx LS_COLORS (echo (dircolors -c .dircolors/dircolors.256dark | string split ' ')[3] |string split "'")[2]
 # }
 
 # ================ Alias================ {
