@@ -193,6 +193,9 @@ endif
 let g:python_host_prog = '/bin/python2'
 let g:python3_host_prog = '/bin/python'
 
+" List of filetype that igrnored in autocmd [MyHighlighter, NumberToggle]
+let g:ft_blacklist = ['nerdtree', 'tagbar', 'undotree']
+
 " Disable tmux navigator when zooming the Vim pane. [vim-tmux-navigator]
 let g:tmux_navigator_disable_when_zoomed = 1
 " }
@@ -216,13 +219,19 @@ augroup MyHighlighter
   " autocmd User IncSearchEnter MatchHighlighter 0
   " autocmd User IncSearchExecute MatchHighlighter 1
 
-  set updatetime=500
-  autocmd CursorHold * if (get(g:, 'matchhl', 1) && &ft!='nerdtree') | silent! exe printf('match CurrentWordUL /\<%s\>/', expand('<cword>')) | endif
-  autocmd CursorMoved * if (get(g:, 'matchhl', 1) && &ft!='nerdtree') | silent! exe printf('match none') | endif
+  set updatetime=700
+  autocmd CursorHold * if (get(g:, 'matchhl', 1) && (&ft !~ join(g:ft_blacklist, '\|')))
+                    \ |     silent! exe printf('match CurrentWordUL /\<%s\>/', expand('<cword>'))
+                    \ | endif
+  autocmd CursorMoved * if (get(g:, 'matchhl', 1) && (&ft !~ join(g:ft_blacklist, '\|')))
+                    \ |     silent! exe printf('match none')
+                    \ | endif
 augroup END
 
 nnoremap <silent> <f4> :MatchHighlighter<CR>
-command! -nargs=? MatchHighlighter call ToggleSetMatchHL(empty(<q-args>) ? !g:matchhl : expand(<q-args>))
+command! -nargs=? MatchHighlighter
+            \  call ToggleSetMatchHL(
+            \      empty(<q-args>) ? !get(g:, 'matchhl', 1) : expand(<q-args>))
 
 function! ToggleSetMatchHL(arg) abort
     match none | diffupdate | syntax sync fromstart
@@ -560,7 +569,7 @@ xnoremap <leader>! "gy:call <SID>goog(@g, 1)<cr>gv
 " ================ Auto Group Commands ================ {
 " vim-python
 " http://vi.stackexchange.com/questions/8772/how-can-i-fix-missing-syntax-highlighting-for-python-keywords-such-as-self/8773#8773
-augroup neo-python
+augroup NeoPython
     autocmd!
     autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8
         \ formatoptions+=croq softtabstop=4 textwidth=79
@@ -571,19 +580,19 @@ augroup neo-python
     autocmd FileType python setlocal completeopt-=preview
 augroup END
 
-augroup numbertoggle
+augroup NumberToggle
   autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+  autocmd BufEnter,FocusGained,InsertLeave * if &ft !~ join(g:ft_blacklist, '\|') | set relativenumber | endif
+  autocmd BufLeave,FocusLost,InsertEnter   * if &ft !~ join(g:ft_blacklist, '\|') | set norelativenumber | endif
 augroup END
 
-augroup neo-markdown
+augroup NeoMarkdown
     autocmd!
     autocmd FileType markdown,*commit* setlocal concealcursor=nc conceallevel=2
         \ | setlocal spell
 augroup END
 
-augroup terminal
+augroup Terminal
     autocmd TermOpen * set bufhidden=hide
     autocmd TermOpen * setlocal nospell
     autocmd TermOpen * startinsert
