@@ -577,13 +577,18 @@ augroup NeoPython
         \ | let python_highlight_all=1
         \ | syn keyword pythonSelf self
         \ | highlight def pythonSelf cterm=italic gui=italic ctermfg=9 guifg=#cb4b16
-    autocmd FileType python setlocal completeopt-=preview
+        \ | setlocal completeopt-=preview
 augroup END
 
 augroup NumberToggle
   autocmd!
   autocmd BufEnter,FocusGained,InsertLeave * if &ft !~ join(g:ft_blacklist, '\|') | set relativenumber | endif
   autocmd BufLeave,FocusLost,InsertEnter   * if &ft !~ join(g:ft_blacklist, '\|') | set norelativenumber | endif
+augroup END
+
+augroup NeoFish
+    autocmd!
+    autocmd FileType fish setlocal foldmethod=expr
 augroup END
 
 augroup NeoMarkdown
