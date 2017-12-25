@@ -17,11 +17,12 @@ set -x TERM xterm-256color
 # Set better LS_Colors
 set -gx LS_COLORS (echo (dircolors -c ~/.dircolors/dircolors.256dark | string split ' ')[3] |string split "'")[2]
 
-# Configuration of https://github.com/decors/fish-colored-man
+# Configuration of [ https://github.com/decors/fish-colored-man ]
 # Solarized Dark theme of man pages
 if type -q fisher; and fisher ls |grep colored-man > /dev/null
     set -g man_blink -o red
     set -g man_bold -o green
+    set -g man_standout -u af0000
     set -g man_underline -u 93a1a1
 end
 # }
