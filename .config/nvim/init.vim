@@ -148,10 +148,10 @@ set splitright             " Open new windows right of the current window.
 set list                    " Show non-printable characters.
 set showbreak=↪\
 set linebreak
-set listchars=tab:▸\ ,extends:❯,precedes:❮,eol:¬,trail:·
+set listchars=tab:▷┅,extends:❯,precedes:❮,eol:¬,trail:·,nbsp:⦸
 set fillchars=diff:⣿,vert:│ " Change fillchars
 set diffopt=vertical        " Use in vertical diff mode
-
+set formatoptions+=n                  " smart auto-indenting inside numbered lists
 " set textwidth   =79 " Set width of the wrap
 " set colorcolumn =79 " Set color column
 
@@ -185,6 +185,9 @@ set guicursor=n-v-c-sm:block,i-ci-ve:ver25-iCursor-blinkwait300-blinkon200-blink
 
 " Keep the cursor on the same column
 set nostartofline
+set switchbuf=usetab                " try to reuse windows/tabs when switching buffers
+set virtualedit=block               " allow cursor to move where there is no text in visual block mode
+set whichwrap=b,h,l,s,<,>,[,],~       " allow <BS>/h/l/<Left>/<Right>/<Space>, ~ to cross line boundaries
 
 " The fish shell is not very compatible to other shells and unexpectedly
 " breaks things that use 'shell'.
