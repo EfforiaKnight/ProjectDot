@@ -148,7 +148,7 @@ set splitright             " Open new windows right of the current window.
 set list                    " Show non-printable characters.
 set showbreak=↪\
 set linebreak
-set listchars=tab:▷┅,extends:❯,precedes:❮,eol:¬,trail:·,nbsp:⦸
+set listchars=tab:▷┅,extends:❯,precedes:❮,eol:¬,trail:·
 set fillchars=diff:⣿,vert:│ " Change fillchars
 set diffopt=vertical        " Use in vertical diff mode
 set formatoptions+=n                  " smart auto-indenting inside numbered lists
@@ -198,9 +198,6 @@ endif
 let g:python_host_prog = '/bin/python2'
 let g:python3_host_prog = '/bin/python'
 
-" List of filetype that igrnored in autocmd [MyHighlighter, NumberToggle]
-let g:ft_blacklist = ['nerdtree', 'tagbar', 'undotree']
-
 " Disable tmux navigator when zooming the Vim pane. [vim-tmux-navigator]
 let g:tmux_navigator_disable_when_zoomed = 1
 " }
@@ -225,10 +222,10 @@ augroup MyHighlighter
   " autocmd User IncSearchExecute MatchHighlighter 1
 
   set updatetime=700
-  autocmd CursorHold * if (get(g:, 'matchhl', 1) && (&ft !~ join(g:ft_blacklist, '\|')))
+  autocmd CursorHold * if (get(g:, 'matchhl', 1) && (empty(&buftype)))
                     \ |     silent! exe printf('match CurrentWordUL /\<%s\>/', expand('<cword>'))
                     \ | endif
-  autocmd CursorMoved * if (get(g:, 'matchhl', 1) && (&ft !~ join(g:ft_blacklist, '\|')))
+  autocmd CursorMoved * if (get(g:, 'matchhl', 1) && (empty(&buftype)))
                     \ |     silent! exe printf('match none')
                     \ | endif
 augroup END
@@ -308,6 +305,11 @@ vnoremap <C-b> <C-b>zz
 " Refocus folds; close any other fold except the one that you are on
 " ----------------------------------------------------------------------------
 nnoremap ,z zMzvzz
+
+" ----------------------------------------------------------------------------
+" Repeat last macro if in a normal buffer.
+" ----------------------------------------------------------------------------
+nnoremap <silent> <expr> <CR> empty(&buftype) ? '@@' : '<CR>'
 
 " ----------------------------------------------------------------------------
 " Remap H and L (top, bottom of screen to left and right end of line)
@@ -412,6 +414,14 @@ nnoremap ]q :cnext<cr>zz
 nnoremap [q :cprev<cr>zz
 nnoremap ]l :lnext<cr>zz
 nnoremap [l :lprev<cr>zz
+
+" ----------------------------------------------------------------------------
+" Repurpose cursor keys for one of my most oft-use key sequences
+" ----------------------------------------------------------------------------
+nnoremap <silent> <Up> :cprevious<CR>
+nnoremap <silent> <Down> :cnext<CR>
+nnoremap <silent> <Left> :cpfile<CR>
+nnoremap <silent> <Right> :cnfile<CR>
 
 " ----------------------------------------------------------------------------
 " Buffers
@@ -587,8 +597,8 @@ augroup END
 
 augroup NumberToggle
   autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave * if &ft !~ join(g:ft_blacklist, '\|') | set relativenumber | endif
-  autocmd BufLeave,FocusLost,InsertEnter   * if &ft !~ join(g:ft_blacklist, '\|') | set norelativenumber | endif
+  autocmd BufEnter,FocusGained,InsertLeave * if empty(&buftype) | set relativenumber | endif
+  autocmd BufLeave,FocusLost,InsertEnter   * if empty(&buftype) | set norelativenumber | endif
 augroup END
 
 augroup NeoFish
@@ -669,6 +679,7 @@ if executable('rg')
     nnoremap <silent> <Leader>rg       :Rg <C-R><C-W><CR>
     nnoremap <silent> <Leader>RG       :Rg <C-R>=expand("<cWORD>")<CR><CR>
     xnoremap <silent> <Leader>rg       y:Rg <C-R>"<CR>
+    set grepprg=rg\ --line-number\ --smart-case\ --no-messages
 endif
 
 if executable('ag')
@@ -684,9 +695,10 @@ if executable('ag')
     nnoremap <silent> <Leader>AG       :Ag <C-R>=expand("<cWORD>")<CR><CR>
     xnoremap <silent> <Leader>ag       y:Ag <C-R>"<CR>
     "nnoremap <silent> <Leader>/        :Ag <CR>
-    set grepprg=ag\ --nogroup\ --nocolor
-    command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
+    " set grepprg=ag\ --nogroup\ --nocolor
 endif
+
+command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 
 " nnoremap <silent> <Leader><Leader> :Files<CR>
 " prevent fzf to open files inside NERD_tree buffer
