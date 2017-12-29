@@ -41,6 +41,7 @@ Plug 'vim-scripts/ReplaceWithRegister'
 " Code support
 Plug 'KeitaNakamura/highlighter.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
+Plug 'EfforiaKnight/vim-cursorword'
 
 " Syntax for almsot all types
 Plug 'sheerun/vim-polyglot'
@@ -76,6 +77,7 @@ set background=dark
 colorscheme solarized8
 let g:solarized_term_italics = 1
 let g:solarized_enable_extra_hi_groups = 1
+hi Search cterm=underline ctermfg=124 gui=underline guifg=#af0000
 " }
 
 " ================ Encoding ================ {
@@ -212,47 +214,6 @@ set synmaxcol   =200       " Only highlight the first 200 columns.
 if has('nvim')
     set inccommand=nosplit " Multiple substitute in window
 endif
-
-hi CurrentWordUL cterm=underline gui=underline
-hi Search cterm=underline ctermfg=124 gui=underline guifg=#af0000
-
-augroup MyHighlighter
-  autocmd!
-  " autocmd User IncSearchEnter MatchHighlighter 0
-  " autocmd User IncSearchExecute MatchHighlighter 1
-
-  set updatetime=700
-  autocmd CursorHold * if (get(g:, 'matchhl', 1) && (empty(&buftype)))
-                    \ |     silent! exe printf('match CurrentWordUL /\<%s\>/', expand('<cword>'))
-                    \ | endif
-  autocmd CursorMoved * if (get(g:, 'matchhl', 1) && (empty(&buftype)))
-                    \ |     silent! exe printf('match none')
-                    \ | endif
-augroup END
-
-nnoremap <silent> <f4> :MatchHighlighter<CR>
-command! -nargs=? MatchHighlighter
-            \  call ToggleSetMatchHL(
-            \      empty(<q-args>) ? !get(g:, 'matchhl', 1) : expand(<q-args>))
-
-function! ToggleSetMatchHL(arg) abort
-    match none | diffupdate | syntax sync fromstart
-    let g:matchhl = a:arg
-endfunction
-
-let g:incsearch#highlight = {
-\   'match' : {
-\     'group' : 'IncSearchUnderline',
-\     'priority' : '10'
-\   },
-\   'on_cursor' : {
-\     'priority' : '100'
-\   },
-\   'cursor' : {
-\     'group' : 'ErrorMsg',
-\     'priority' : '1000'
-\   }
-\ }
 " }
 
 " ================ Leader Map ================ {
@@ -519,7 +480,7 @@ nnoremap <silent> <leader>O :<C-u>call append(line(".")-1, repeat([""], v:count1
 inoremap <C-s>              <ESC>:update<CR>
 nnoremap <C-s>              :update<CR>
 nnoremap <leader>w          :update<CR>
-nnoremap <silent> <leader>c :Sayonara!<CR>
+nnoremap <silent> <A-q>     :Sayonara!<CR>
 nnoremap <silent> <A-k>     :Sayonara<CR>
 
 nnoremap <silent> <A-Right> :call IntelligentVerticalResize('right')<CR>
@@ -653,6 +614,13 @@ function! IntelligentVerticalResize(direction) abort
 endfunction
 " }
 
+" ================ Plugin: CursorWord configurations ================ {
+set updatetime=700       " Match update highlight
+
+" Toggle cursorword plugin
+nnoremap <silent> <f4> :let g:cursorword=!get(g:, 'cursorword', 1)<CR>
+" }
+
 " ================ Plugin: FZF configurations ================ {
 " set fzf's default input to AG instead of find. This also removes gitignore etc
 let $FZF_DEFAULT_COMMAND = 'rg --files --smart-case --no-ignore --hidden --follow --no-messages --glob "!.git/*"'
@@ -760,6 +728,21 @@ map z*  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)zz  " Stay
 map gz* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)zz " Stay and whole word
 map z#  <Plug>(incsearch-nohl0)<Plug>(asterisk-z#)zz  " Stay
 map gz# <Plug>(incsearch-nohl0)<Plug>(asterisk-gz#)zz " Stay and whole word
+
+
+let g:incsearch#highlight = {
+\   'match' : {
+\     'group' : 'IncSearchUnderline',
+\     'priority' : '10'
+\   },
+\   'on_cursor' : {
+\     'priority' : '100'
+\   },
+\   'cursor' : {
+\     'group' : 'ErrorMsg',
+\     'priority' : '1000'
+\   }
+\ }
 " }
 
 " ================ Plugin: Neoformat configurations ================ {
