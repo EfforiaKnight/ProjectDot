@@ -27,7 +27,7 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'mhinz/vim-sayonara'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-repeat'
-Plug 'mbbill/undotree'
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 
 " Usage
 " [count]["x]gr{motion}
@@ -50,7 +50,13 @@ Plug 'sbdchd/neoformat'
 "Plug 'w0rp/ale'
 Plug 'neomake/neomake'
 Plug 'jiangmiao/auto-pairs'
-Plug 'majutsushi/tagbar'
+
+" Change surround: cs<target><replace>
+" Add surround: ys<text object><target>
+" Delete surround: ds<target>
+Plug 'tpope/vim-surround'
+
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-commentary'
