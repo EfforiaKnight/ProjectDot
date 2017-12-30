@@ -670,7 +670,7 @@ command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 
 " nnoremap <silent> <Leader><Leader> :Files<CR>
 " prevent fzf to open files inside NERD_tree buffer
-nnoremap <silent> <expr> <Leader><Leader> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
+nnoremap <silent> <expr> <C-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
 nnoremap <silent> <Leader><Enter>  :Buffers<CR>
 
 
