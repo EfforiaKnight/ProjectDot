@@ -47,6 +47,13 @@ set -x FZF_DEFAULT_COMMAND "rg \
 set -x FZF_DEFAULT_OPTS " \
     --inline-info \
     --reverse \
+    --cycle \
+    --bind='alt-a:select-all' \
+    --bind='ctrl-r:toggle-all' \
+    --bind='ctrl-s:toggle-sort' \
+    --bind='alt-v:page-up' \
+    --bind='ctrl-v:page-down' \
+    --bind='alt-w:toggle-preview-wrap' \
     --bind 'ctrl-alt-j:down,ctrl-alt-k:up' \
     "
 
