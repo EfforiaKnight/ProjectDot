@@ -144,6 +144,12 @@ gen_fzf_default_opts
 ## }
 # }
 
+# ================ fizzygit ================ {
+if type -q fizzygit
+    fizzygit
+end
+# }
+
 # ================ virtualfish ================ {
 eval (python -m virtualfish auto_activation global_requirements)
 # }
