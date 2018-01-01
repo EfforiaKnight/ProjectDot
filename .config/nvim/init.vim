@@ -46,9 +46,9 @@ Plug 'EfforiaKnight/vim-cursorword'
 " Syntax for almsot all types
 Plug 'sheerun/vim-polyglot'
 
-Plug 'sbdchd/neoformat'
-"Plug 'w0rp/ale'
-Plug 'neomake/neomake'
+" Plug 'sbdchd/neoformat'
+Plug 'w0rp/ale'
+" Plug 'neomake/neomake'
 Plug 'jiangmiao/auto-pairs'
 
 " Change surround: cs<target><replace>
@@ -195,7 +195,8 @@ set guicursor=n-v-c-sm:block,i-ci-ve:ver25-iCursor-blinkwait300-blinkon200-blink
 set nostartofline
 set switchbuf=usetab                " try to reuse windows/tabs when switching buffers
 set virtualedit=block               " allow cursor to move where there is no text in visual block mode
-set whichwrap=b,h,l,s,<,>,[,],~       " allow <BS>/h/l/<Left>/<Right>/<Space>, ~ to cross line boundaries
+set whichwrap=b,h,l,s,<,>,[,],~     " allow <BS>/h/l/<Left>/<Right>/<Space>, ~ to cross line boundaries
+set iskeyword-=/                    " Ctrl-W in command-line stops at /
 
 " The fish shell is not very compatible to other shells and unexpectedly
 " breaks things that use 'shell'.
@@ -621,7 +622,7 @@ endfunction
 " }
 
 " ================ Plugin: CursorWord configurations ================ {
-set updatetime=700       " Match update highlight
+set updatetime=400       " Match update highlight
 
 " Toggle cursorword plugin
 nnoremap <silent> <f4> :let g:cursorword=!get(g:, 'cursorword', 1)<CR>
@@ -752,13 +753,13 @@ let g:incsearch#highlight = {
 " }
 
 " ================ Plugin: Neoformat configurations ================ {
-let g:neoformat_python_yapf = {
-        \ 'exe': 'yapf',
-        \ 'args': ['based_on_style=pep8'],
-        \ }
-let g:neoformat_enabled_python = ['autopep8','yapf']
-nnoremap <leader>= :<C-u>Neoformat<cr>
-vnoremap <leader>= :Neoformat<cr>
+" let g:neoformat_python_yapf = {
+"         \ 'exe': 'yapf',
+"         \ 'args': ['based_on_style=pep8'],
+"         \ }
+" let g:neoformat_enabled_python = ['autopep8','yapf']
+" nnoremap <leader>= :<C-u>Neoformat<cr>
+" vnoremap <leader>= :Neoformat<cr>
 " }
 
 " ================ Plugin: IndentLine configurations ================ {
@@ -778,13 +779,14 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#tabline#show_close_button = 0
 "let g:airline#extensions#tabline#buffer_nr_format = '%s '
 "let g:airline#extensions#tabline#buffer_nr_show = 0
-" let g:airline#extensions#ale#error_symbol = '⨉ '
-" let g:airline#extensions#ale#warning_symbol = '⚠ '
+
+let g:airline#extensions#ale#error_symbol = '✘ '
+let g:airline#extensions#ale#warning_symbol = '⚠ '
 
 " enable/disable vim-obsession integration
 let g:airline#extensions#obsession#enabled = 1
 " set marked window indicator string
-let g:airline#extensions#obsession#indicator_text = ''
+let g:airline#extensions#obsession#indicator_text = '◈'
 
 let g:airline_solarized_bg='dark'
 
@@ -873,15 +875,26 @@ inoremap <silent><expr> <C-Space> deoplete#mappings#manual_complete()
 " }
 
 " ================ Plugin: ALE configurations ================ {
-"let g:ale_linters = {
-"\   'python': ['flake8'],
-"\}
-" let g:ale_sign_error = '⨉'
-"let g:ale_sign_warning = '⚠️'
-"let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '⬥ ok']
+let g:ale_linters = {
+\   'python': ['flake8'],
+\}
+let g:ale_fixers = {
+\    'python': ['yapf', 'add_blank_lines_for_python_control_statements', 'remove_trailing_lines'],
+\}
+
+let g:ale_python_flake8_options = '--ignore=E501'
+
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '➤'
+let g:ale_sign_info = 'ℹ'
+highlight link ALEErrorSign DiffDelete
+highlight link ALEWarningSign DiffChange
+let g:ale_sign_column_always = 1
+" let g:ale_statusline_format = ['✘ %d', '⚠ %d', '✓ ok']
 " let g:ale_lint_delay = 1000
-" nmap ]a <Plug>(ale_next_wrap)
-" nmap [a <Plug>(ale_previous_wrap)
+nmap <leader>= <Plug>(ale_fix)
+nmap ]a <Plug>(ale_next_wrap)
+nmap [a <Plug>(ale_previous_wrap)
 " }
 
 " ================ Plugin: Neomake configurations ================ {
@@ -889,7 +902,7 @@ inoremap <silent><expr> <C-Space> deoplete#mappings#manual_complete()
 " autocmd! BufReadPost,BufWritePost * Neomake
 
 " When writing a buffer, and on normal mode changes (after 750ms).
-call neomake#configure#automake('nw', 750)
+" call neomake#configure#automake('nw', 750)
 " let g:neomake_warning_sign = {
 "       \ 'text': '⚠️',
 "       \ 'texthl': 'WarningMsg',
