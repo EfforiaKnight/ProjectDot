@@ -495,6 +495,8 @@ nnoremap <silent> <A-Left>  :call IntelligentVerticalResize('left')<CR>
 nnoremap <silent> <A-Up>    :resize +1<CR>
 nnoremap <silent> <A-Down>  :resize -1<CR>
 
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+command! Wsudo w !sudo tee > /dev/null %
 " ----------------------------------------------------------------------------
 " Readline-style key bindings in command-line
 " ----------------------------------------------------------------------------
