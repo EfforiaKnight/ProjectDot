@@ -14,6 +14,10 @@ set -x EDITOR nvim
 set -x TERM xterm-256color
 #set -x TERM screen-256color
 
+# Disable greeting
+function fish_greeting
+end
+
 # Set better LS_Colors
 set -gx LS_COLORS (echo (dircolors -c ~/.dircolors/dircolors.256dark | string split ' ')[3] |string split "'")[2]
 
