@@ -1,6 +1,6 @@
 #  ================ EfforiaKnight ================
 #  ================ Modeline and Notes ================ {
-# vim: foldmarker={,} foldmethod=marker foldlevel=0:
+# vim: filetype=fish foldmarker={,} foldmethod=marker foldlevel=0:
 # }
 
 # ================ Theme and Terminal ================ {
@@ -58,7 +58,6 @@ set -x FZF_DEFAULT_OPTS " \
     --bind='alt-v:page-up' \
     --bind='ctrl-v:page-down' \
     --bind='alt-w:toggle-preview-wrap' \
-    --bind 'ctrl-alt-j:down,ctrl-alt-k:up' \
     "
 
 set -x FZF_TMUX 1
