@@ -290,10 +290,16 @@ vnoremap L g_
 " ----------------------------------------------------------------------------
 " Visual linewise up and down by default (and use gj gk to go quicker)
 " ----------------------------------------------------------------------------
-nnoremap j gj
-nnoremap k gk
+" nnoremap j gj
+" nnoremap k gk
 vnoremap j gj
 vnoremap k gk
+
+" ----------------------------------------------------------------------------
+" Store relative line number jumps in the jumplist if they exceed a threshold.
+" ----------------------------------------------------------------------------
+nnoremap <expr> j (v:count > 5 ? "m'" . v:count : '') . 'gj'
+nnoremap <expr> k (v:count > 5 ? "m'" . v:count : '') . 'gk'
 
 " ----------------------------------------------------------------------------
 " Don't yank to default register when changing something
