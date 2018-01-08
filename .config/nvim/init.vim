@@ -298,8 +298,8 @@ vnoremap k gk
 " ----------------------------------------------------------------------------
 " Store relative line number jumps in the jumplist if they exceed a threshold.
 " ----------------------------------------------------------------------------
-nnoremap <expr> j (v:count > 5 ? "m'" . v:count : '') . 'gj'
-nnoremap <expr> k (v:count > 5 ? "m'" . v:count : '') . 'gk'
+nnoremap <expr> j (v:count > 5 ? "m'" . v:count : '') . 'j'
+nnoremap <expr> k (v:count > 5 ? "m'" . v:count : '') . 'k'
 
 " ----------------------------------------------------------------------------
 " Don't yank to default register when changing something
