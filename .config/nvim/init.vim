@@ -787,6 +787,7 @@ let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#tabline#show_close_button = 0
 "let g:airline#extensions#tabline#buffer_nr_format = '%s '
 "let g:airline#extensions#tabline#buffer_nr_show = 0
+let g:airline_symbols.spell = '✓'
 
 let g:airline#extensions#ale#error_symbol = '✘ '
 let g:airline#extensions#ale#warning_symbol = '⚠ '
