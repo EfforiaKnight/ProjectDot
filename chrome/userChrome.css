@@ -1,0 +1,177 @@
+/*
+ For Firefox Flat-Dark UWP style (dark theme and compact url bar) 
+*/
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+#urlbar {
+	margin-left: 1px !important;
+	margin-right: 1px !important;
+}
+#nav-bar[id], #PersonalToolbar[id], #web-developer-toolbar[id], #navigator-toolbox[tabsontop="true"] > #nav-bar[id], #navigator-toolbox[tabsontop="true"]:not([customizing]) > #nav-bar[collapsed="true"][id] + toolbar, #navigator-toolbox[tabsontop="true"]:not([customizing]) > #nav-bar[collapsed="true"] + #customToolbars + #PersonalToolbar[id], #navigator-toolbox[tabsontop="false"] > #nav-bar[id], #navigator-toolbox[tabsontop="false"]:not([customizing]) > #nav-bar[collapsed="true"][id] + toolbar, #navigator-toolbox[tabsontop="false"]:not([customizing]) > #nav-bar[collapsed="true"] + #customToolbars + #PersonalToolbar[id] {
+	background-image: none !important;
+	background: #383c4a !important;
+}
+#navigator-toolbox::after {
+	border-bottom: 0px !important;
+}
+
+.urlbar-input-box, .searchbar-textbox > .autocomplete-textbox-container > .textbox-input-box {
+    margin: 0;
+    font-family: "Source Code Pro" !important;
+}
+
+/*
+Custom forward, backward and reload icons 
+*/
+@-moz-document url(chrome://browser/content/browser.xul) {    
+    #back-button {
+        list-style-image: url("_back.png") !important;
+    }
+    #forward-button {
+        list-style-image: url("_forward.png") !important;
+    }
+    #reload-button {
+        list-style-image: url("_reload.png") !important;
+    }
+}
+
+
+/*
+No more scrollbars
+*/
+/*
+#content browser {
+  margin-right: -14px !important;
+  overflow-y: scroll;
+  margin-bottom: -14px !important;
+  overflow-x: scroll;
+}
+*/
+
+/*
+Hamburger menu to the left most position
+*/
+
+#PanelUI-button {
+    -moz-box-ordinal-group: 0 !important;
+}
+:root:not([uidensity="compact"]):not([chromehidden~="toolbar"]) #PanelUI-button {
+    border-inline-end: 1px solid !important;
+    border-inline-start: initial !important;
+    margin-inline-end: 3px !important;
+    margin-inline-start: 24px !important;
+    padding-inline-end: 12px !important;
+}
+
+#PanelUI-menu-button {
+    padding-inline-start: 5px;
+    padding-inline-end: 8px !important;
+}
+
+/*
+Replace hamburger menu with firefox icon
+*/
+/*
+#PanelUI-menu-button {
+    list-style-image: url("chrome://branding/content/icon32.png") !important;
+}
+:root[uidensity="touch"] #PanelUI-menu-button > .toolbarbutton-badge-stack {
+    padding: 0 !important;
+}
+#PanelUI-menu-button > .toolbarbutton-badge-stack > .toolbarbutton-icon {
+    width: 20px !important;
+}
+*/
+
+/*
+Hide the page action button (three dots) 
+*/
+#pageActionButton {
+    display: none !important;
+}
+
+
+/* ##### TABS TOOLBAR ##################################### */
+
+/* Hide main tabs toolbar */
+#TabsToolbar {
+	visibility: collapse;
+}
+
+/* ##### SIDEBAR ########################################## */
+
+/* Sidebar min and max width removal */
+#sidebar {
+	max-width: none !important;
+	min-width: 0px !important;
+}
+
+
+/* Remove below if not using TreeStyleTab extension */
+
+/* Hide splitter, when using Tree Style Tab. */
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] + #sidebar-splitter {
+	display: none !important;
+}
+/* Hide sidebar header, when using Tree Style Tab. */
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header {
+	visibility: collapse;
+}
+
+/* Shrink sidebar until hovered, when using Tree Style Tab. */
+:root {
+	--thin-tab-width: 30px;
+	--wide-tab-width: 200px;
+}
+#sidebar-box:not([sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]) {
+	min-width: var(--wide-tab-width) !important;
+	max-width: none !important;
+}
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] {
+	overflow: hidden !important;
+	position: relative !important;
+	transition: all 200ms !important;
+	min-width: var(--thin-tab-width) !important;
+	max-width: var(--thin-tab-width) !important;
+}
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]:hover,
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar {
+	transition: all 200ms !important;
+	min-width: var(--wide-tab-width) !important;
+	max-width: var(--wide-tab-width) !important;
+}
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]:hover {
+	margin-right: calc((var(--wide-tab-width) - var(--thin-tab-width)) * -1) !important;
+}
+
+/* ##### URL BAR ########################################## */
+
+/* Hide (i) in URL bar */
+#identity-icon {
+	width: 0 !important;
+}
+/* Adjust lock icon to be closer to edge */
+#identity-box {
+	padding-inline-start: 2px !important;
+}
+/* Bookmark padding */
+toolbarbutton.bookmark-item:not(.subviewbutton) {
+	padding: 1px 6px !important;
+}
+toolbarbutton.bookmark-item {
+	border: 1px rgba(0, 0, 0, 0) solid !important;
+}
+/* Get rid of bookmark icon */
+.bookmark-item .toolbarbutton-icon {
+	display: none;
+}
+/* Center URL */
+#urlbar .urlbar-input-box {
+	text-align: center;
+	margin-bottom: 1px;
+}
+/* Custom bindings.xml in same folder as userChrome, for simple URL */
+#urlbar {
+	-moz-binding: url("bindings.xml#urlbar") !important;
+}
