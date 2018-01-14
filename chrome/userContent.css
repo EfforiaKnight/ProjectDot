@@ -221,11 +221,11 @@ img.transparent {
 
   #header-utils-btn:hover {
     color: white !important;
-    background: #222 !important;
+    background: #5c616c !important;
   }
 
   .addon {
-    color: gray !important;
+    color: #898d99 !important;
   }
 
   .addon[active="false"] {
@@ -285,8 +285,8 @@ img.transparent {
   menulist {
     -moz-appearance: none !important;
     background: linear-gradient(var(--dark-accent), var(--dark-accent)) !important;
-    border: 1px #444 solid !important;
-    color: #999 !important;
+    border: 1px #383c4a solid !important;
+    color: #898d99 !important;
     box-shadow: unset !important;
     text-decoration: unset !important;
   }
@@ -806,8 +806,20 @@ img.transparent {
   }
 
   .dialogBox {
-    filter: invert(80%) !important;
+    border: none !important;
+    background: var(--grey-70) !important;
+    color: var(--primary-light-color) !important;
+    /* filter: invert(80%) !important; */
   }
+  .groupbox-title {
+    background: var(--grey-70) !important;
+  }
+  /* .groupbox-body, */
+  /* .dialogFrame, */
+  /* .prefwindow { */
+  /*   background-color: var(--grey-70) !important; */
+  /*   color: var(--primary-light-color) !important; */
+  /* } */
 
   /* Search Engines */
 
