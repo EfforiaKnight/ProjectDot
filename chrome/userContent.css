@@ -6,15 +6,15 @@
    I like my transparent images transparent,
    so this reverses that. */
 img.transparent {
-	background: transparent !important;
+  background: transparent !important;
 }
 
 /* ##### DARK 'ABOUT' PAGES ##################### */
 /*
 @-moz-document url('about:blank'), url('about:newtab'), url('about:home'), url('about:preferences') {
-	body {
-		background-color: #404552 !important;
-	}
+  body {
+    background-color: #404552 !important;
+  }
 }
 */
 
@@ -814,12 +814,10 @@ img.transparent {
   .groupbox-title {
     background: var(--grey-70) !important;
   }
-  /* .groupbox-body, */
-  /* .dialogFrame, */
-  /* .prefwindow { */
-  /*   background-color: var(--grey-70) !important; */
-  /*   color: var(--primary-light-color) !important; */
-  /* } */
+  #FontsDialog.prefwindow {
+    background-color: #fff0 !important;
+    color: #fff !important;
+  }
 
   /* Search Engines */
 
@@ -1907,7 +1905,7 @@ img.transparent {
   .Header,
   .Footer-wrapper,
   .LanguageTools-header-row {
-    background: var(--grey-80) !important;
+    background: var(--grey-60) !important;
   }
 
   .LanguageTools-table-row:nth-child(2n) {
@@ -1944,6 +1942,7 @@ img.transparent {
   .Card--photon .Card-contents,
   .Card-footer-link,
   .MetadataCard,
+  .CardList ul > li,
   .AddonDescription-more-addons:not(.AddonDescription-more-addons--theme) .Card-contents .AddonsCard-list,
   .AddonDescription-more-addons--theme .Card-contents .AddonsCard-list,
   .Search .SearchResults .SearchResult,
@@ -1972,7 +1971,7 @@ img.transparent {
   .Addon-author,
   .Addon-author a,
   .Addon-author a:link
-	.Button--action,
+  .Button--action,
   .Button--action:link,
   .Button--action.Button--small:link,
   .Button--action,
@@ -1983,6 +1982,7 @@ img.transparent {
   .Paginate-page-number,
   .SearchSuggestion-name,
   .ExpandableCard-ToggleLink:link,
+  h1, h2,
   .Paginate .Paginate-item {
     color: var(--primary-light-color) !important;
   }
@@ -2140,7 +2140,7 @@ background: var(--primary-accent-color) !important;
 
   .highlight .error,
   .highlight .error > :-moz-any(.start-tag, .end-tag, .comment, .cdata, .doctype,
-	                              .pi, .entity, .attribute-name, .attribute-value) {
+                                .pi, .entity, .attribute-name, .attribute-value) {
     color: #de7474 !important;
   }
 }
