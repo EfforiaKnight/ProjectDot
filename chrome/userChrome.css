@@ -175,3 +175,19 @@ toolbarbutton.bookmark-item {
 #urlbar {
 	-moz-binding: url("bindings.xml#urlbar") !important;
 }
+
+/* ##### Bookmarks ########################################## */
+/* Bookmarks panel menu: only show bookmarks, folders, and Other Bookmarks */
+#BMB_bookmarksToolbar,
+#BMB_mobileBookmarks + menuseparator,
+#BMB_mobileBookmarks,
+#bookmarks-menu-button .menu-iconic[label="Recent Tags"] + menuseparator,
+#bookmarks-menu-button .menu-iconic[label="Recent Tags"],
+/* #bookmarks-menu-button .menu-iconic[label="Other Bookmarks"], */
+#BMB_bookmarksShowAll
+{ display: none !important; }
+
+/* Minimize white flash when loading some sites */
+browser[type="content-primary"], #content, browser[type="content"] > html {
+    background: #383c4a !important;
+}
