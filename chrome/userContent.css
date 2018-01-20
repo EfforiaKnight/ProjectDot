@@ -691,8 +691,9 @@ img.transparent {
 
   /* overlay background */
 
-  .modal-overlay {
-    background: var(--grey-60) !important;
+  .modal-overlay,
+  .modal {
+    background: var(--grey-70) !important;
   }
 
   /* Onboarding */
