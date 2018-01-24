@@ -36,6 +36,10 @@ Custom forward, backward and reload icons
     }
 }
 
+/*
+Remove close minimize maximize button
+*/
+#titlebar-max,#titlebar-restore,#titlebar-close,#titlebar-min{display:none}
 
 /*
 No more scrollbars
