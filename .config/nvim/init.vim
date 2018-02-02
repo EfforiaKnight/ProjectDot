@@ -38,7 +38,9 @@ Plug 'vim-scripts/ReplaceWithRegister'
 " http://vim.wikia.com/wiki/Moving_through_camel_case_words
 " Plug 'chaoren/vim-wordmotion'
 
+" ----------------------------------------------------------------------------
 " Code support
+" ----------------------------------------------------------------------------
 Plug 'KeitaNakamura/highlighter.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesEnable' }
 Plug 'EfforiaKnight/vim-cursorword'
@@ -62,15 +64,21 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tmhedberg/SimpylFold'
 Plug 'Konfekt/FastFold'
+Plug 'EfforiaKnight/vim-slime'
+" Plug 'jpalardy/vim-slime'
 
+" ----------------------------------------------------------------------------
 " Python support
+" ----------------------------------------------------------------------------
 Plug 'davidhalter/jedi-vim', { 'for': 'python' }
 Plug 'zchee/deoplete-jedi', { 'for': 'python' }
 Plug 'Shougo/echodoc.vim', { 'for': 'python' }
 Plug 'Shougo/neopairs.vim', { 'for': 'python' }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
+" ----------------------------------------------------------------------------
 " Icons plugin
+" ----------------------------------------------------------------------------
 Plug 'ryanoasis/vim-devicons'
 call plug#end()
 " }
@@ -956,6 +964,14 @@ let g:undotree_WindowLayout = 2
 
 " ================ Plugin: Polyglot configurations ================ {
 let g:polyglot_disabled = ['python'] " Neovim python syntax is better
+" }
+
+" ================ Plugin: VimSlime configurations ================ {
+let g:slime_target = "tmux"
+let g:slime_paste_file = tempname()
+let g:slime_default_config = {"socket_name": "default", "target_pane": "2"}
+let g:slime_dont_ask_default = 1
+let g:slime_python_ipython = 1
 " }
 
 " ================ Backups ================ {
