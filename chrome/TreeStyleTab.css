@@ -61,20 +61,21 @@
 #tabbar {
 	border-right: 1px solid #1d1d1d;
 	box-shadow: none !important;
+        background-color: #383c4a; /* #404552; */
 }
 
 
 
 .tab {
 	background-color: transparent;
-	border-color: #292929;
+	border-color: #383c4a; /* #292929; */
 	box-shadow: none !important;
 }
 .tab .label {
 	color: rgba(207,207,207,0.75) !important;
 }
 .tab:hover {
-	background-color: #898d99 !important;
+	background-color: #5c616c !important;
 }
 .tab:hover .label {
 	color: rgba(207,207,207,1) !important;
