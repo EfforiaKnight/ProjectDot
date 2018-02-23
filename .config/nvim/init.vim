@@ -25,6 +25,13 @@ Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeFind', 'NERDTreeToggle'] }
 Plug 'tpope/vim-obsession'
 Plug 'junegunn/vim-peekaboo'
 Plug 'mhinz/vim-sayonara'
+
+" Adds gutter signs and highlights based on git diff
+" <leader>hn to go to next hunk
+" <leader>hp to go to previous hunk
+" <leader>hs to stage hunks within cursor
+" <leader>hr to revert hunks within cursor
+" <leader>hv to preview the hunk
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-repeat'
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
@@ -101,10 +108,11 @@ set fileencodings=utf-8
 " }
 
 " ================ Folds ================ {
-"set foldmethod=indent      " fold based on indent level
-set foldnestmax=1         " max 10 depth
-"set foldenable             " Auto fold code
-set foldlevelstart=1        " start with fold level of 1
+set foldmethod=marker     " fold based on marker level
+set foldnestmax=5         " Limit folds when using indent or syntax
+set foldenable            " Auto fold code
+set foldlevelstart=1      " start with fold level of 1
+set foldopen+=jump
 
 " Improved Vim fold-text
 " See: http://www.gregsexton.org/2011/03/improving-the-text-displayed-in-a-fold/
@@ -135,6 +143,7 @@ set foldtext=FoldText()
 
 " ================ UI layout ================ {
 set scrolloff=7            " Set 7 lines to the cursor - when moving vertically using j/k
+set sidescrolloff=5
 set number                 " Display line numbers
 set ruler                  " Always show current position
 " set signcolumn=yes
@@ -150,11 +159,11 @@ set wildmode=list:longest,full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
 set wildignorecase
 
-set laststatus  =2         " Always show statusline.
+set laststatus=2           " Always show statusline.
 set noshowmode             " Show current mode in command-line.
 set showcmd                " Show already typed keys when more are expected.
-set shortmess=at           " Avoids hit enter
-set report      =0         " Always report changed lines.
+set shortmess=atIc         " Avoids hit enter
+set report=0               " Always report changed lines.
 
 set splitbelow             " Open new windows below the current window.
 set splitright             " Open new windows right of the current window.
@@ -183,8 +192,9 @@ set autoindent             " Indent according to previous line.
 set breakindent            " Indent wrapped lines to match start
 set breakindentopt=shift:2 " Emphasize broken lines by indenting them
 set expandtab              " Use spaces instead of tabs.
-set softtabstop =4         " Tab key indents by 4 spaces.
-set shiftwidth  =4         " >> indents by 4 spaces.
+set softtabstop=2          " Tab key indents by 4 spaces.
+set shiftwidth=2           " >> indents by 4 spaces.
+set tabstop=2
 set shiftround             " >> indents to next multiple of 'shiftwidth'.
 filetype plugin indent on  " Load plugins according to detected filetype.
 " }
@@ -205,6 +215,12 @@ set switchbuf=usetab                " try to reuse windows/tabs when switching b
 set virtualedit=block               " allow cursor to move where there is no text in visual block mode
 set whichwrap=b,h,l,s,<,>,[,],~     " allow <BS>/h/l/<Left>/<Right>/<Space>, ~ to cross line boundaries
 set iskeyword-=/                    " Ctrl-W in command-line stops at /
+set complete+=kspell                " Keyword completion brings in the dictionary if spell check is enabled
+
+" Make sure there's a default dictionary for completion
+if filereadable('/usr/share/dict/cracklib-small')
+  set dictionary+=/usr/share/dict/cracklib-small
+endif
 
 " The fish shell is not very compatible to other shells and unexpectedly
 " breaks things that use 'shell'.
@@ -241,7 +257,8 @@ let maplocalleader="\\"
 " Remap ctrl-c for this issue:
 " https://github.com/Shougo/deoplete.nvim/issues/460
 " ----------------------------------------------------------------------------
-inoremap <C-c> <Esc>
+" inoremap <C-c> <Esc>
+inoremap <C-c> <C-[>:echom "Use C-[ instead!"<cr>
 
 " ----------------------------------------------------------------------------
 " Recover from accidental Ctrl-U
@@ -280,12 +297,19 @@ vnoremap <C-b> <C-b>zz
 " ----------------------------------------------------------------------------
 " Refocus folds; close any other fold except the one that you are on
 " ----------------------------------------------------------------------------
-nnoremap ,z zMzvzz
+nnoremap <leader>z zMzvzz
 
 " ----------------------------------------------------------------------------
 " Repeat last macro if in a normal buffer.
 " ----------------------------------------------------------------------------
 nnoremap <silent> <expr> <CR> empty(&buftype) ? '@@' : '<CR>'
+
+" ----------------------------------------------------------------------------
+" Run `.` or macro over selected lines, taken from:
+" https://reddit.com/r/vim/comments/3y2mgt
+" ----------------------------------------------------------------------------
+vnoremap . :normal .<CR>
+vnoremap @ :normal @
 
 " ----------------------------------------------------------------------------
 " Remap H and L (top, bottom of screen to left and right end of line)
@@ -330,7 +354,8 @@ noremap <C-w>- :<C-u>split<CR>
 " ----------------------------------------------------------------------------
 " Change to current working directory
 " ----------------------------------------------------------------------------
-nnoremap <leader>cd :lcd %:p:h<CR>:pwd<CR>
+nnoremap <leader>lcd :lcd %:p:h<CR>:pwd<CR>
+nnoremap <leader>cd :GitRootCD<cr>
 
 " ----------------------------------------------------------------------------
 " Open/close folds
@@ -570,7 +595,7 @@ xnoremap <leader>! "gy:call <SID>goog(@g, 1)<cr>gv
 " http://vi.stackexchange.com/questions/8772/how-can-i-fix-missing-syntax-highlighting-for-python-keywords-such-as-self/8773#8773
 augroup NeoPython
     autocmd!
-    autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8
+    autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=4
         \ formatoptions+=croq softtabstop=4 textwidth=79
         \ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
         \ | let python_highlight_all=1
@@ -621,6 +646,7 @@ augroup END
 " Be aware of whether you are right or left vertical split
 " so you can use arrows more naturally.
 " Inspired by https://github.com/ethagnawl.
+" <A-Right> <A-Left>
 function! IntelligentVerticalResize(direction) abort
   let l:window_resize_count = 5
   let l:current_window_is_last_window = (winnr() == winnr('$'))
@@ -635,6 +661,27 @@ function! IntelligentVerticalResize(direction) abort
   let l:command = 'vertical resize ' . l:modifier . l:window_resize_count . '<CR>'
   execute l:command
 endfunction
+
+" Change to git root of current file (if in a repo)
+function! FindGitRootCD()
+  let root = systemlist('git -C ' . expand('%:p:h') . ' rev-parse --show-toplevel')[0]
+  if v:shell_error
+    return ''
+  else
+    return {'dir': root}
+  endif
+endfunction
+
+function! GitRootCD()
+  let result = FindGitRootCD()
+  if type(result) == type({})
+    execute 'lcd' fnameescape(result['dir'])
+    echo 'Now in '.result['dir']
+  else
+    echo 'Not in git repo!'
+  endif
+endfunction
+command! GitRootCD :call GitRootCD()
 " }
 
 " ================ Plugin: CursorWord configurations ================ {
@@ -647,7 +694,7 @@ nnoremap <silent> <f4> :let g:cursorword=!get(g:, 'cursorword', 1)<CR>
 " ================ Plugin: FZF configurations ================ {
 " set fzf's default input to AG instead of find. This also removes gitignore etc
 let $FZF_DEFAULT_COMMAND = 'rg --files --smart-case --no-ignore --hidden --follow --no-messages --glob "!.git/*"'
-let $FZF_DEFAULT_OPTS .= ' --inline-info -m --bind ctrl-a:select-all,ctrl-d:deselect-all,alt-t:toggle-all'
+let $FZF_DEFAULT_OPTS .= ' --inline-info -m --bind ctrl-a:select-all,ctrl-d:deselect-all,alt-t:toggle-all,alt-k:preview-up,alt-j:preview-down'
 
 command! -bang -nargs=? -complete=dir Files
   \ call fzf#vim#files(<q-args>,
@@ -655,8 +702,14 @@ command! -bang -nargs=? -complete=dir Files
   \                         : fzf#vim#with_preview('right:60%:hidden', '?'),
   \                 <bang>0)
 
-command! -bang -nargs=* MRU
-  \ call fzf#vim#history(fzf#vim#with_preview('right:60%:hidden', '?'), <bang>0)
+command! -bang -nargs=? -complete=dir GFiles
+  \ call fzf#vim#gitfiles(<q-args>,
+  \                 <bang>0 ? fzf#vim#with_preview('down:60%')
+  \                         : fzf#vim#with_preview('right:60%:hidden', '?'),
+  \                 <bang>0)
+
+command! -nargs=? MRU
+  \ call fzf#vim#history(fzf#vim#with_preview('right:60%:hidden', '?'))
 
 if executable('rg')
     let s:rg_options = 'rg --no-messages --line-number --smart-case --hidden --follow --no-heading --color=always --glob "!.git/*" '
@@ -670,7 +723,7 @@ if executable('rg')
     nnoremap <silent> <Leader>rg       :Rg <C-R><C-W><CR>
     nnoremap <silent> <Leader>RG       :Rg <C-R>=expand("<cWORD>")<CR><CR>
     xnoremap <silent> <Leader>rg       y:Rg <C-R>"<CR>
-    set grepprg=rg\ --line-number\ --smart-case\ --no-messages
+    set grepprg=rg\ --line-number\ --smart-case\ --no-messages\ --vimgrep
 endif
 
 if executable('ag')
@@ -686,7 +739,7 @@ if executable('ag')
     nnoremap <silent> <Leader>AG       :Ag <C-R>=expand("<cWORD>")<CR><CR>
     xnoremap <silent> <Leader>ag       y:Ag <C-R>"<CR>
     "nnoremap <silent> <Leader>/        :Ag <CR>
-    " set grepprg=ag\ --nogroup\ --nocolor
+    " set grepprg=ag\ --nogroup\ --nocolor\ --vimgrep
 endif
 
 command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
@@ -694,9 +747,11 @@ command! -nargs=1 -bar Grep execute 'silent! grep! <q-args>' | redraw! | copen
 " nnoremap <silent> <Leader><Leader> :Files<CR>
 " prevent fzf to open files inside NERD_tree buffer
 nnoremap <silent> <expr> <C-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":Files\<cr>"
-nnoremap <silent> <Leader><Enter>  :Buffers<CR>
+nnoremap <silent> <expr> <M-S-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":GFiles\<cr>"
 
-
+  " <M-p> for open buffers
+nnoremap <silent> <M-p> :Buffers<cr>
+nnoremap <silent> <Leader><Enter> :call fzf#vim#gitfiles('?')<CR>
 
 nnoremap <silent> <Leader>` :Marks<CR>
 nnoremap <silent> q:        :History:<CR>
@@ -708,6 +763,15 @@ nnoremap <silent> <Leader>p :MRU<CR>
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-j> <plug>(fzf-complete-file-ag)
 imap <c-x><c-l> <plug>(fzf-complete-line)
+
+" [Buffers] Jump to the existing window if possible
+let g:fzf_buffers_jump = 1
+
+" [[B]Commits] Customize the options used by 'git log':
+let g:fzf_commits_log_options = "--color --graph --pretty=format:'%Cred%h%Creset -%C(auto)%d% %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
+" [Commands] --expect expression for directly executing the command
+let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 " }
 
 " ================ Plugin: Commentary configurations ================ {
@@ -719,8 +783,8 @@ map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 map g/ <Plug>(incsearch-stay)
 
-map n  <Plug>(incsearch-nohl-n)zz
-map N  <Plug>(incsearch-nohl-N)zz
+map n  <Plug>(incsearch-nohl-n)zzzv
+map N  <Plug>(incsearch-nohl-N)zzzv
 
 let g:incsearch#auto_nohlsearch = 1
 
