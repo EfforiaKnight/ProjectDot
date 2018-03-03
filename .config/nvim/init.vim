@@ -25,6 +25,7 @@ Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeFind', 'NERDTreeToggle'] }
 Plug 'tpope/vim-obsession'
 Plug 'junegunn/vim-peekaboo'
 Plug 'mhinz/vim-sayonara'
+Plug 'dkarter/bullets.vim'
 
 " Adds gutter signs and highlights based on git diff
 " <leader>hn to go to next hunk
@@ -354,8 +355,8 @@ noremap <C-w>- :<C-u>split<CR>
 " ----------------------------------------------------------------------------
 " Change to current working directory
 " ----------------------------------------------------------------------------
-nnoremap <leader>lcd :lcd %:p:h<CR>:pwd<CR>
-nnoremap <leader>cd :GitRootCD<cr>
+nnoremap <leader>cd :lcd %:p:h<CR>:pwd<CR>
+nnoremap <leader>gcd :GitRootCD<cr>
 
 " ----------------------------------------------------------------------------
 " Open/close folds
@@ -750,7 +751,7 @@ nnoremap <silent> <expr> <C-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : ''
 nnoremap <silent> <expr> <M-S-p> (expand('%') =~ 'NERD_tree' ? "\<c-w>\<c-w>" : '').":GFiles\<cr>"
 
   " <M-p> for open buffers
-nnoremap <silent> <M-p> :Buffers<cr>
+nnoremap <silent> <M-Enter> :Buffers<cr>
 nnoremap <silent> <Leader><Enter> :call fzf#vim#gitfiles('?')<CR>
 
 nnoremap <silent> <Leader>` :Marks<CR>
@@ -1036,6 +1037,10 @@ let g:slime_paste_file = tempname()
 let g:slime_default_config = {"socket_name": "default", "target_pane": "2"}
 let g:slime_dont_ask_default = 1
 let g:slime_python_ipython = 1
+" }
+
+" ================ Plugin: Bullets ================ {
+  let g:bullets_enabled_file_types = ['markdown', 'text', 'gitcommit']
 " }
 
 " ================ Backups ================ {
