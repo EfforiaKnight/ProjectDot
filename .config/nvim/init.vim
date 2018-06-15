@@ -25,7 +25,7 @@ Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeFind', 'NERDTreeToggle'] }
 Plug 'tpope/vim-obsession'
 Plug 'junegunn/vim-peekaboo'
 Plug 'mhinz/vim-sayonara'
-Plug 'dkarter/bullets.vim'
+" Plug 'dkarter/bullets.vim'
 
 " Adds gutter signs and highlights based on git diff
 " <leader>hn to go to next hunk
@@ -1040,7 +1040,7 @@ let g:slime_python_ipython = 1
 " }
 
 " ================ Plugin: Bullets ================ {
-  let g:bullets_enabled_file_types = ['markdown', 'text', 'gitcommit']
+  " let g:bullets_enabled_file_types = ['markdown', 'text', 'gitcommit']
 " }
 
 " ================ Backups ================ {
