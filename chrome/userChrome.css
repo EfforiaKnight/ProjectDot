@@ -39,7 +39,37 @@ Custom forward, backward and reload icons
 /*
 Remove close minimize maximize button
 */
-#titlebar-max,#titlebar-restore,#titlebar-close,#titlebar-min{display:none}
+/* #titlebar-max,#titlebar-restore,#titlebar-close,#titlebar-min{display:none} */
+
+#TabsToolbar {
+  visibility: collapse !important;
+}
+
+#titlebar-buttonbox {
+  height: 40px !important;
+}
+
+#nav-bar {
+  margin-top: -40px;
+  margin-right: 90px;
+  box-shadow: none !important;
+}
+
+[uidensity="compact"]:root #titlebar-buttonbox {
+  height: 32px !important;
+}
+
+[uidensity="compact"]:root #nav-bar {
+  margin-top: -32px;
+}
+
+#titlebar-spacer {
+  background-color: #383c4a;
+}
+
+#titlebar-buttonbox-container {
+  background-color: #383c4a;
+}
 
 /*
 No more scrollbars
