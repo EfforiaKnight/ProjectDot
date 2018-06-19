@@ -91,61 +91,45 @@ set -x FZF_FIND_FILE_OPTS " \
 ## FZF Historty {
 # ---------------------------------------------------------------------------------
 set -x FZF_REVERSE_ISEARCH_OPTS '--history=/home/efforia/.cache/FZF_reverse_history'
-set -x FZF_FIND_AND_EXECUTE_OPTS '--history=/home/efforia/.cache/FZF_reverse_history'
 ## }
 
 ## FZF cd command {
 # ---------------------------------------------------------------------------------
 set -x FZF_CD_OPTS '--history=/home/efforia/.cache/FZF_cd_history'
-set -x FZF_CD_WITH_HIDDEN_OPTS '--history=/home/efforia/.cache/FZF_cd_history'
 ## }
 
-## FZF Locate command {
-# ---------------------------------------------------------------------------------
-set -x FZF_LOCATE_OPTS " \
-    --preview 'rougify {} 2>/dev/null' \
-    --preview-window right:60%:hidden \
-    --bind 'ctrl-e:execute(tmux split-window -fh nvim {})' \
-    --bind 'ctrl-o:execute(open {})' \
-    --bind 'alt-n:preview-down' \
-    --bind 'alt-p:preview-up' \
-    --bind '?:toggle-preview' \
-    --history='/home/efforia/.cache/FZF_history' \
-    "
-## }
-
-## FZF Color Theme {
-# ---------------------------------------------------------------------------------
-function gen_fzf_default_opts --description "Solarized theme for fzf"
-    set -l color00 '#002b36'
-    set -l color01 '#073642'
-    set -l color02 '#586e75'
-    set -l color03 '#657b83'
-    set -l color04 '#839496'
-    set -l color05 '#93a1a1'
-    set -l color06 '#eee8d5'
-    set -l color07 '#fdf6e3'
-    set -l color08 '#dc322f'
-    set -l color09 '#cb4b16'
-    set -l color0A '#b58900'
-    set -l color0B '#859900'
-    set -l color0C '#2aa198'
-    set -l color0D '#268bd2'
-    set -l color0E '#6c71c4'
-    set -l color0F '#d33682'
-
-    set -x FZF_DEFAULT_OPTS " \
-        $FZF_DEFAULT_OPTS \
-        --color=bg+:$color01,bg:$color00,spinner:$color0C,hl:$color0D \
-        --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C \
-        --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D \
-    "
-end
-
-# Set default fzf opts
-gen_fzf_default_opts
-## }
-# }
+# ## FZF Color Theme {
+# # ---------------------------------------------------------------------------------
+# function gen_fzf_default_opts --description "Solarized theme for fzf"
+#     set -l color00 '#002b36'
+#     set -l color01 '#073642'
+#     set -l color02 '#586e75'
+#     set -l color03 '#657b83'
+#     set -l color04 '#839496'
+#     set -l color05 '#93a1a1'
+#     set -l color06 '#eee8d5'
+#     set -l color07 '#fdf6e3'
+#     set -l color08 '#dc322f'
+#     set -l color09 '#cb4b16'
+#     set -l color0A '#b58900'
+#     set -l color0B '#859900'
+#     set -l color0C '#2aa198'
+#     set -l color0D '#268bd2'
+#     set -l color0E '#6c71c4'
+#     set -l color0F '#d33682'
+# 
+#     set -x FZF_DEFAULT_OPTS " \
+#         $FZF_DEFAULT_OPTS \
+#         --color=bg+:$color01,bg:$color00,spinner:$color0C,hl:$color0D \
+#         --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C \
+#         --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D \
+#     "
+# end
+# 
+# # Set default fzf opts
+# gen_fzf_default_opts
+# ## }
+# # }
 
 # ================ fizzygit ================ {
 if type -q fizzygit
