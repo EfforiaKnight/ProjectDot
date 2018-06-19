@@ -131,6 +131,13 @@ set -x FZF_CD_OPTS '--history=/home/efforia/.cache/FZF_cd_history'
 # ## }
 # # }
 
+set -x FZF_DEFAULT_OPTS " \
+    $FZF_DEFAULT_OPTS \
+    --color=bg+:-1,bg:-1,spinner:#2aa198,hl:#268bd2 \
+    --color=fg:#839496,header:#268bd2,info:#b58900,pointer:#2aa198 \
+    --color=marker:#2aa198,prompt:#b58900,hl+:#268bd2
+    "
+
 # ================ fizzygit ================ {
 if type -q fizzygit
     fizzygit
