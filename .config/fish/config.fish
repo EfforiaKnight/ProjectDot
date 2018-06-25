@@ -4,12 +4,21 @@
 # }
 
 # ================ Theme and Terminal ================ {
-set -g theme_nerd_fonts yes
-set -g theme_color_scheme solarized
-set -g fish_prompt_pwd_dir_length 0
-set -g theme_title_use_abbreviated_path no
+### BobTheFish
+#set -g theme_nerd_fonts yes
+#set -g theme_color_scheme solarized
+#set -g theme_color_scheme dracula
+#set -g fish_prompt_pwd_dir_length 0
+#set -g theme_title_use_abbreviated_path no
 #set -g theme_date_format "+%a %H:%M"
-set -g theme_display_date no
+#set -g theme_display_date no
+
+### Spacefish
+set -g SPACEFISH_PACKAGE_SHOW false
+set -g SPACEFISH_NODE_SHOW false
+set -g SPACEFISH_BATTERY_SHOW false
+set -g SPACEFISH_RUBY_SHOW false
+
 set -x EDITOR nvim
 set -x TERM xterm-256color
 #set -x TERM screen-256color
