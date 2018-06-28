@@ -190,4 +190,9 @@ function gcd --description 'Go to a path relative to the top directory of the cu
     end
     cd "$topdir/$argv"
 end
+
+function clean -d "clear old cache and remove orphans"
+    paccache -rvk3
+    pacman -Rsn (pacman -Qdtq)
+end
 # }
