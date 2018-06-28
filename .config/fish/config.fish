@@ -193,6 +193,6 @@ end
 
 function clean -d "clear old cache and remove orphans"
     paccache -rvk3
-    pacman -Rsn (pacman -Qdtq)
+    sudo pacman -Rsn (pacman -Qdtq)
 end
 # }
