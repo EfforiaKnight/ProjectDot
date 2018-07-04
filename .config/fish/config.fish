@@ -157,6 +157,10 @@ end
 eval (python -m virtualfish auto_activation global_requirements)
 # }
 
+# ================ Autojump ================ {
+[ -f /usr/share/autojump/autojump.fish ]; and source /usr/share/autojump/autojump.fish
+# }
+
 # ================ Functions ================ {
 function mkd --description 'mkdir -p and cd into'
     mkdir -p $argv
