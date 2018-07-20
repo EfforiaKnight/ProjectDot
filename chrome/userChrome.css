@@ -222,6 +222,7 @@ toolbarbutton.bookmark-item {
 { display: none !important; }
 
 /* Minimize white flash when loading some sites */
-browser[type="content-primary"], #content, browser[type="content"] > html {
+browser[type="content-primary"], #content, browser[type="content"] > html, tabbrowser tabpanels, #appcontent > #content {
     background: #383c4a !important;
+    background-color: #383c4a !important;
 }
