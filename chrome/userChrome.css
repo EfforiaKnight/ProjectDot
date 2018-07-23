@@ -94,13 +94,22 @@ Hamburger menu to the left most position
     border-inline-end: 1px solid !important;
     border-inline-start: initial !important;
     margin-inline-end: 3px !important;
-    margin-inline-start: 24px !important;
-    padding-inline-end: 12px !important;
+    margin-inline-start: 0px !important;
+    padding-inline-end: 0px !important;
 }
 
 #PanelUI-menu-button {
     padding-inline-start: 5px;
     padding-inline-end: 8px !important;
+}
+
+:root:not([uidensity=compact]) #back-button {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+:root:not([uidensity=compact]) #back-button > .toolbarbutton-icon {
+  background-color: unset !important;
+  border: none !important;
 }
 
 /*
