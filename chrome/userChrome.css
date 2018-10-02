@@ -216,7 +216,9 @@ toolbarbutton.bookmark-item {
 }
 /* Custom bindings.xml in same folder as userChrome, for simple URL */
 #urlbar {
-	-moz-binding: url("bindings.xml#urlbar") !important;
+	// -moz-binding: url("bindings.xml#urlbar") !important;
+	// font-size: 2.25em;
+	border-radius: 45px !important;
 }
 
 /* ##### Bookmarks ########################################## */
