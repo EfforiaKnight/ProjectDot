@@ -1,0 +1,134 @@
+
+
+
+/* ARCXMODS */
+/*START OF ARCX MODIFICATIONS */
+
+/* Titlebar stuff */
+/*remove background from titlebar buttons */
+.titlebar-min, .titlebar-max,.titlebar-close{
+background: transparent !important; }
+
+/* Sets hover colour for max/min buttons to ArcX blue */
+.titlebar-min:hover, .titlebar-max:hover{
+background-color: var(--accent-2) !important;}
+
+/* Sets hover colour for close button to a complimentary red */
+.titlebar-close:hover{
+background-color: #CC0036 !important; }
+
+
+/*Tab related stuff */
+/* Forces tab border recolour */
+#navigator-toolbox {
+	--tabs-border-color: var(--tone-8) !important;}
+
+/* Hide or recolour border on background tab */
+.tabbrowser-tab::after {
+  color: var(--tone-8) !important; 
+  opacity: 1 !important; } /*set to 0 to hide borders*/
+
+/* Hide/recolour leftmost tab border when not maximised */
+  .titlebar-spacer[type="pre-tabs"] {
+    border-inline-end: 1px solid var(--lwt-background-tab-separator-color, currentColor);
+    color: var(--tone-8) !important;
+    opacity: 1 !important;} /*set to 0 to hide borders*/
+
+/* Makes favicons greyscale */
+tab .tab-icon, .tab-icon-image {
+  filter: grayscale(0.5) hue-rotate(180deg) contrast(0.6) brightness(1.2) saturate(2) grayscale(1) contrast(0.9) brightness(0.9) contrast(1.4)}
+
+
+/*Extra stuff*/
+/* changes toolbar button hover/clicked colours */
+.toolbarbutton-1 {
+  --toolbarbutton-hover-background: var(--tone-8) !important;
+  --toolbarbutton-active-background: var(--tone-5) !important;}
+
+/* changes back/forward buttons on the Library window - has an equivelant in usercontent for if it is opened in browser  */
+#placesToolbar > toolbarbutton {
+    background-color: var(--tone-6) !important;
+    filter: none !important;}
+
+/* Bookmarks Toolbar styling for Compact density */
+
+#PlacesToolbarItems .bookmark-item {
+
+padding:7px 10px 7px 10px !important;
+
+border-radius:15px !important;
+
+font-size:12px !important;
+
+}
+
+/* Width of folder items in Bookmarks Toolbar */
+
+.menuitem-with-favicon, .menu-iconic {
+
+max-width:300px !important;
+
+}
+
+/* Placement of the right-arrow for sub-folders in folder items */
+
+.menu-right {
+
+margin-right:1px !important;
+
+}
+
+/* Rounded corners on address bar */
+
+#urlbar {
+
+border-radius:15px !important;
+
+}
+
+/*
+ * Remove "Send Page to Device", "Send Link to Device", 
+ * "Send Tab to Device" from context menu.
+ *
+ * Contributor(s): PilzAdam
+ */
+
+#context-sendpagetodevice, #context-sep-sendpagetodevice,
+#context-sendlinktodevice, #context-sep-sendlinktodevice,
+#context_sendTabToDevice, #context_sendTabToDevice_separator {
+  display: none !important;
+}
+
+/*
+ * Move the hamburger menu to the top left, before the first tab
+ *
+ * Contributor(s): Alex Vallat
+ */
+
+#PanelUI-button {
+  -moz-box-ordinal-group: 0;
+  border-left: none !important;
+  position: absolute;
+}
+
+:root[uidensity=compact] #PanelUI-button {
+  margin-top: -28px;
+}
+
+#PanelUI-button {
+  margin-top: -30px;
+}
+
+:root[uidensity=touch] #PanelUI-button {
+  margin-top: -36px;
+}
+
+#TabsToolbar {
+  /* Ensure the padding is always present even when maximized */
+  padding-inline-start: 42px !important;
+}
+
+#TabsToolbar .titlebar-spacer[type="pre-tabs"] 
+{
+display: none !important; 
+}

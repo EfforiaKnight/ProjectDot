@@ -1,0 +1,45 @@
+ 
+
+
+ /*ARCXCOLOURS*/
+/* START OF ARCX COLOUR MODIFICATIONS */
+/* Colour palette edits */
+--grey-10: #DEE2E8 !important; /* TONE-1 */
+--grey-20: #67707C !important; /* TONE-2 */
+--grey-30: #C5C5EB !important; /* TONE-3 */  /*no idea where this is used */
+--grey-40: #AFB9C6 !important; /* TONE-4 */
+--grey-50: #767B87 !important; /* TONE-5 */
+--grey-60: #373D48 !important; /* TONE-6 */
+--grey-70: #404552 !important; /* TONE-7 */
+--grey-80: #2B2E39 !important; /* TONE-8 */
+--grey-90: #252932 !important; /* TONE-9 */
+
+--blue-40: #7FBAFF !important;
+--blue-50: #65ADFF !important; /* LIGHTR OF \/ */
+--blue-60: #5294E2 !important; /* MASTER TONE */  /* Matches blue used for Win 10 theme */
+--blue-70: #1F66B7 !important; /* DARKER OF /\ */
+--blue-80: #10355F !important;
+--blue-90: #081D34 !important;
+
+--accent-1: var(--blue-40) !important;
+--accent-2: var(--blue-50) !important;
+--accent-3: var(--blue-60) !important;
+
+/* Top frame background colours */
+--tab-background-color: #313742 !important;
+--toolbar-bgcolor: var(--tone-6) !important;
+--tabs-border-color: var(--tone-6) !important;
+
+/* Address bar colours */
+--lwt-toolbar-field-background-color: var(--tone-7) !important;
+--lwt-toolbar-field-color: var(--tone-1) !important;
+--lwt-toolbar-field-border-color: var(--tone-5) !important;
+
+--in-content-item-hover: rgba(82,148,226,0.25);
+
+/*
+Known issue, if you open the history browser or downloads menu some 
+buttons are very clearly incorrectly coloured, currently looking for a fix.
+*/
+
+

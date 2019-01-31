@@ -1,0 +1,11 @@
+
+
+.Button--action {
+    background: var(--blue-40) !important;}
+
+/* changes back/forward buttons on the Library if opened in a tab - has an equivelant in userchrome for if it is opened in it's window  */
+#placesToolbar > toolbarbutton {
+    background-color: var(--tone-6) !important;
+    filter: none !important;}
+
+    
