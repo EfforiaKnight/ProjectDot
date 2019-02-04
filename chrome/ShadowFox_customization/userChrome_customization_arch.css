@@ -1,3 +1,6 @@
+
+
+
 /* ARCXMODS */
 /*START OF ARCX MODIFICATIONS */
 
@@ -55,7 +58,7 @@ padding:7px 10px 7px 10px !important;
 
 border-radius:15px !important;
 
-font-size:12px !important;
+font-size:13px !important;
 
 }
 
@@ -124,7 +127,7 @@ Custom forward, backward and reload icons
 }
 #nav-bar[id], #PersonalToolbar[id], #web-developer-toolbar[id], #navigator-toolbox[tabsontop="true"] > #nav-bar[id], #navigator-toolbox[tabsontop="true"]:not([customizing]) > #nav-bar[collapsed="true"][id] + toolbar, #navigator-toolbox[tabsontop="true"]:not([customizing]) > #nav-bar[collapsed="true"] + #customToolbars + #PersonalToolbar[id], #navigator-toolbox[tabsontop="false"] > #nav-bar[id], #navigator-toolbox[tabsontop="false"]:not([customizing]) > #nav-bar[collapsed="true"][id] + toolbar, #navigator-toolbox[tabsontop="false"]:not([customizing]) > #nav-bar[collapsed="true"] + #customToolbars + #PersonalToolbar[id] {
 	background-image: none !important;
-	background: #383c4a !important;
+	background: #2f343f !important;
 }
 #navigator-toolbox::after {
 	border-bottom: 0px !important;
