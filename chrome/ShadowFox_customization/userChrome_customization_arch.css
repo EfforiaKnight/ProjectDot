@@ -1,0 +1,271 @@
+/* ARCXMODS */
+/*START OF ARCX MODIFICATIONS */
+
+/* Titlebar stuff */
+/*remove background from titlebar buttons */
+.titlebar-min, .titlebar-max,.titlebar-close{
+background: transparent !important; }
+
+/* Sets hover colour for max/min buttons to ArcX blue */
+.titlebar-min:hover, .titlebar-max:hover{
+background-color: var(--accent-2) !important;}
+
+/* Sets hover colour for close button to a complimentary red */
+.titlebar-close:hover{
+background-color: #CC0036 !important; }
+
+
+/*Tab related stuff */
+/* Forces tab border recolour */
+#navigator-toolbox {
+	--tabs-border-color: var(--tone-8) !important;}
+
+/* Hide or recolour border on background tab */
+.tabbrowser-tab::after {
+  color: var(--tone-8) !important; 
+  opacity: 1 !important; } /*set to 0 to hide borders*/
+
+/* Hide/recolour leftmost tab border when not maximised */
+  .titlebar-spacer[type="pre-tabs"] {
+    border-inline-end: 1px solid var(--lwt-background-tab-separator-color, currentColor);
+    color: var(--tone-8) !important;
+    opacity: 1 !important;} /*set to 0 to hide borders*/
+
+/* Makes favicons greyscale */
+tab .tab-icon, .tab-icon-image {
+  filter: grayscale(0.5) hue-rotate(180deg) contrast(0.6) brightness(1.2) saturate(2) grayscale(1) contrast(0.9) brightness(0.9) contrast(1.4)}
+
+
+/*Extra stuff*/
+/* changes toolbar button hover/clicked colours */
+.toolbarbutton-1 {
+  --toolbarbutton-hover-background: var(--tone-8) !important;
+  --toolbarbutton-active-background: var(--tone-5) !important;}
+
+/* changes back/forward buttons on the Library window - has an equivelant in usercontent for if it is opened in browser  */
+#placesToolbar > toolbarbutton {
+    background-color: var(--tone-6) !important;
+    filter: none !important;}
+
+/* Bookmarks Toolbar styling for Compact density */
+
+#PlacesToolbarItems .bookmark-item {
+
+padding:7px 10px 7px 10px !important;
+
+border-radius:15px !important;
+
+font-size:12px !important;
+
+}
+
+/* Width of folder items in Bookmarks Toolbar */
+
+.menuitem-with-favicon, .menu-iconic {
+
+max-width:300px !important;
+
+}
+
+/* Placement of the right-arrow for sub-folders in folder items */
+
+.menu-right {
+
+margin-right:1px !important;
+
+}
+
+/* Rounded corners on address bar */
+
+#urlbar {
+
+border-radius:15px !important;
+
+}
+
+/*
+ * Remove "Send Page to Device", "Send Link to Device", 
+ * "Send Tab to Device" from context menu.
+ *
+ * Contributor(s): PilzAdam
+ */
+
+#context-sendpagetodevice, #context-sep-sendpagetodevice,
+#context-sendlinktodevice, #context-sep-sendlinktodevice,
+#context_sendTabToDevice, #context_sendTabToDevice_separator {
+  display: none !important;
+}
+
+#TabsToolbar .titlebar-spacer[type="pre-tabs"] 
+{
+display: none !important; 
+}
+
+/*
+Custom forward, backward and reload icons 
+*/
+@-moz-document url(chrome://browser/content/browser.xul) {    
+    #back-button {
+        list-style-image: url("_back.png") !important;
+    }
+    #forward-button {
+        list-style-image: url("_forward.png") !important;
+    }
+    #reload-button {
+        list-style-image: url("_reload.png") !important;
+    }
+}
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+#urlbar {
+	margin-left: 1px !important;
+	margin-right: 1px !important;
+}
+#nav-bar[id], #PersonalToolbar[id], #web-developer-toolbar[id], #navigator-toolbox[tabsontop="true"] > #nav-bar[id], #navigator-toolbox[tabsontop="true"]:not([customizing]) > #nav-bar[collapsed="true"][id] + toolbar, #navigator-toolbox[tabsontop="true"]:not([customizing]) > #nav-bar[collapsed="true"] + #customToolbars + #PersonalToolbar[id], #navigator-toolbox[tabsontop="false"] > #nav-bar[id], #navigator-toolbox[tabsontop="false"]:not([customizing]) > #nav-bar[collapsed="true"][id] + toolbar, #navigator-toolbox[tabsontop="false"]:not([customizing]) > #nav-bar[collapsed="true"] + #customToolbars + #PersonalToolbar[id] {
+	background-image: none !important;
+	background: #383c4a !important;
+}
+#navigator-toolbox::after {
+	border-bottom: 0px !important;
+}
+
+.urlbar-input-box, .searchbar-textbox > .autocomplete-textbox-container > .textbox-input-box {
+    margin: 0;
+    font-family: "Source Code Pro" !important;
+}
+
+#TabsToolbar {
+  visibility: collapse !important;
+}
+
+#titlebar-buttonbox {
+  height: 40px !important;
+}
+
+#nav-bar {
+  margin-top: -30px;
+  margin-right: 90px;
+  box-shadow: none !important;
+}
+
+/*
+Hamburger menu to the left most position
+*/
+
+#PanelUI-button {
+    -moz-box-ordinal-group: 0 !important;
+}
+:root:not([uidensity="compact"]):not([chromehidden~="toolbar"]) #PanelUI-button {
+    border-inline-end: 1px solid !important;
+    border-inline-start: initial !important;
+    margin-inline-end: 3px !important;
+    margin-inline-start: 0px !important;
+    padding-inline-end: 0px !important;
+}
+
+
+:root:not([uidensity=compact]) #back-button {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+:root:not([uidensity=compact]) #back-button > .toolbarbutton-icon {
+  background-color: unset !important;
+  border: none !important;
+}
+
+/*
+Hide the page action button (three dots) 
+*/
+#pageActionButton {
+    display: none !important;
+}
+
+/* ##### SIDEBAR ########################################## */
+
+/* Sidebar min and max width removal */
+#sidebar {
+	max-width: none !important;
+	min-width: 0px !important;
+}
+
+
+/* Remove below if not using TreeStyleTab extension */
+
+/* Hide splitter, when using Tree Style Tab. */
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] + #sidebar-splitter {
+	display: none !important;
+}
+/* Hide sidebar header, when using Tree Style Tab. */
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header {
+	visibility: collapse;
+}
+
+/* Shrink sidebar until hovered, when using Tree Style Tab. */
+:root {
+	--thin-tab-width: 30px;
+	--wide-tab-width: 200px;
+}
+#sidebar-box:not([sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]) {
+	min-width: var(--wide-tab-width) !important;
+	max-width: none !important;
+}
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] {
+	overflow: hidden !important;
+	position: relative !important;
+	transition: all 200ms !important;
+	min-width: var(--thin-tab-width) !important;
+	max-width: var(--thin-tab-width) !important;
+}
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]:hover,
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar {
+	transition: all 200ms !important;
+	min-width: var(--wide-tab-width) !important;
+	max-width: var(--wide-tab-width) !important;
+}
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]:hover {
+	margin-right: calc((var(--wide-tab-width) - var(--thin-tab-width)) * -1) !important;
+}
+
+/* ##### URL BAR ########################################## */
+
+/* Hide (i) in URL bar */
+#identity-icon {
+	width: 0 !important;
+}
+
+/* Adjust lock icon to be closer to edge */
+#identity-box {
+	padding-inline-start: 2px !important;
+}
+
+/* Bookmark padding */
+toolbarbutton.bookmark-item:not(.subviewbutton) {
+	padding: 1px 6px !important;
+}
+
+toolbarbutton.bookmark-item {
+	border: 1px rgba(0, 0, 0, 0) solid !important;
+}
+
+/* Get rid of bookmark icon */
+.bookmark-item .toolbarbutton-icon {
+	display: none;
+}
+
+/* Center URL */
+#urlbar .urlbar-input-box {
+	text-align: center;
+	margin-bottom: 1px;
+}
+
+/* ##### Bookmarks ########################################## */
+/* Bookmarks panel menu: only show bookmarks, folders, and Other Bookmarks */
+#BMB_bookmarksToolbar,
+#BMB_mobileBookmarks + menuseparator,
+#BMB_mobileBookmarks,
+#bookmarks-menu-button .menu-iconic[label="Recent Tags"] + menuseparator,
+#bookmarks-menu-button .menu-iconic[label="Recent Tags"],
+/* #bookmarks-menu-button .menu-iconic[label="Other Bookmarks"], */
+#BMB_bookmarksShowAll
+{ display: none !important; }
