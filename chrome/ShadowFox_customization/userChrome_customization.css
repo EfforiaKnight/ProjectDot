@@ -1,6 +1,3 @@
-
-
-
 /* ARCXMODS */
 /*START OF ARCX MODIFICATIONS */
 
@@ -58,7 +55,7 @@ padding:7px 10px 7px 10px !important;
 
 border-radius:15px !important;
 
-font-size:12px !important;
+font-size:13px !important;
 
 }
 
@@ -99,36 +96,182 @@ border-radius:15px !important;
   display: none !important;
 }
 
-/*
- * Move the hamburger menu to the top left, before the first tab
- *
- * Contributor(s): Alex Vallat
- */
-
-#PanelUI-button {
-  -moz-box-ordinal-group: 0;
-  border-left: none !important;
-  position: absolute;
-}
-
-:root[uidensity=compact] #PanelUI-button {
-  margin-top: -28px;
-}
-
-#PanelUI-button {
-  margin-top: -30px;
-}
-
-:root[uidensity=touch] #PanelUI-button {
-  margin-top: -36px;
-}
-
-#TabsToolbar {
-  /* Ensure the padding is always present even when maximized */
-  padding-inline-start: 42px !important;
-}
-
 #TabsToolbar .titlebar-spacer[type="pre-tabs"] 
 {
 display: none !important; 
 }
+
+/*
+Custom forward, backward and reload icons 
+*/
+@-moz-document url(chrome://browser/content/browser.xul) {    
+    #back-button {
+        list-style-image: url("_back.png") !important;
+    }
+    #forward-button {
+        list-style-image: url("_forward.png") !important;
+    }
+    #reload-button {
+        list-style-image: url("_reload.png") !important;
+    }
+}
+
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+#urlbar {
+	margin-left: 1px !important;
+	margin-right: 1px !important;
+}
+#nav-bar[id], #PersonalToolbar[id], #web-developer-toolbar[id], #navigator-toolbox[tabsontop="true"] > #nav-bar[id], #navigator-toolbox[tabsontop="true"]:not([customizing]) > #nav-bar[collapsed="true"][id] + toolbar, #navigator-toolbox[tabsontop="true"]:not([customizing]) > #nav-bar[collapsed="true"] + #customToolbars + #PersonalToolbar[id], #navigator-toolbox[tabsontop="false"] > #nav-bar[id], #navigator-toolbox[tabsontop="false"]:not([customizing]) > #nav-bar[collapsed="true"][id] + toolbar, #navigator-toolbox[tabsontop="false"]:not([customizing]) > #nav-bar[collapsed="true"] + #customToolbars + #PersonalToolbar[id] {
+	background-image: none !important;
+	background: #313742 !important;
+}
+#navigator-toolbox::after {
+	border-bottom: 0px !important;
+}
+
+.urlbar-input-box, .searchbar-textbox > .autocomplete-textbox-container > .textbox-input-box {
+    margin: 0;
+    font-family: "Source Code Pro" !important;
+}
+
+#TabsToolbar {
+  visibility: collapse !important;
+}
+
+#titlebar-buttonbox {
+  height: 40px !important;
+}
+
+#nav-bar {
+  margin-top: -30px;
+  margin-right: 90px;
+  box-shadow: none !important;
+}
+
+/*
+Hamburger menu to the left most position
+*/
+
+#PanelUI-button {
+    -moz-box-ordinal-group: 0 !important;
+}
+:root:not([uidensity="compact"]):not([chromehidden~="toolbar"]) #PanelUI-button {
+    border-inline-end: 1px solid !important;
+    border-inline-start: initial !important;
+    margin-inline-end: 3px !important;
+    margin-inline-start: 0px !important;
+    padding-inline-end: 0px !important;
+}
+
+
+:root:not([uidensity=compact]) #back-button {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+:root:not([uidensity=compact]) #back-button > .toolbarbutton-icon {
+  background-color: unset !important;
+  border: none !important;
+}
+
+/*
+Hide the page action button (three dots) 
+*/
+#pageActionButton {
+    display: none !important;
+}
+
+/* ##### SIDEBAR ########################################## */
+
+/* Sidebar min and max width removal */
+#sidebar {
+	max-width: none !important;
+	min-width: 0px !important;
+}
+
+
+/* Remove below if not using TreeStyleTab extension */
+
+/* Hide splitter, when using Tree Style Tab. */
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] + #sidebar-splitter {
+	display: none !important;
+}
+/* Hide sidebar header, when using Tree Style Tab. */
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar-header {
+	visibility: collapse;
+}
+
+vbox#sidebar-box.chromeclass-extrachrome {
+  border-right: 0px!important;
+  border-left: 0px!important;
+  border-block-start: 0px!important;
+}
+
+/* Shrink sidebar until hovered, when using Tree Style Tab. */
+:root {
+	--thin-tab-width: 30px;
+	--wide-tab-width: 200px;
+}
+#sidebar-box:not([sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]) {
+	min-width: var(--wide-tab-width) !important;
+	max-width: none !important;
+}
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] {
+	overflow: hidden !important;
+	position: relative !important;
+	transition: all 200ms !important;
+	min-width: var(--thin-tab-width) !important;
+	max-width: var(--thin-tab-width) !important;
+}
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]:hover,
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"] #sidebar {
+	transition: all 200ms !important;
+	min-width: var(--wide-tab-width) !important;
+	max-width: var(--wide-tab-width) !important;
+}
+#sidebar-box[sidebarcommand="treestyletab_piro_sakura_ne_jp-sidebar-action"]:hover {
+	margin-right: calc((var(--wide-tab-width) - var(--thin-tab-width)) * -1) !important;
+}
+
+/* ##### URL BAR ########################################## */
+
+/* Hide (i) in URL bar */
+#identity-icon {
+	width: 0 !important;
+}
+
+/* Adjust lock icon to be closer to edge */
+#identity-box {
+	padding-inline-start: 2px !important;
+}
+
+/* Bookmark padding */
+toolbarbutton.bookmark-item:not(.subviewbutton) {
+	padding: 1px 6px !important;
+}
+
+toolbarbutton.bookmark-item {
+	border: 1px rgba(0, 0, 0, 0) solid !important;
+}
+
+/* Get rid of bookmark icon */
+.bookmark-item .toolbarbutton-icon {
+	display: none;
+}
+
+/* Center URL */
+#urlbar .urlbar-input-box {
+	text-align: center;
+	margin-bottom: 1px;
+}
+
+/* ##### Bookmarks ########################################## */
+/* Bookmarks panel menu: only show bookmarks, folders, and Other Bookmarks */
+#BMB_bookmarksToolbar,
+#BMB_mobileBookmarks + menuseparator,
+#BMB_mobileBookmarks,
+#bookmarks-menu-button .menu-iconic[label="Recent Tags"] + menuseparator,
+#bookmarks-menu-button .menu-iconic[label="Recent Tags"],
+/* #bookmarks-menu-button .menu-iconic[label="Other Bookmarks"], */
+#BMB_bookmarksShowAll
+{ display: none !important; }
